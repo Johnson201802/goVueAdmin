@@ -9,7 +9,7 @@
               <span style="color: #909399;">小程序推广二维码&emsp;&emsp;</span>
               <el-upload
                 list-type="none"
-                action="https://yilixiangsi.magicxhx.com/admin/uploads/ads_img_uploads"
+                action="http://internal.congmingpay.com/internal/uploadmerchantimg.do"
                 accept="image/jpeg,image/jpg,image/gif,image/png"
                 :limit="1"
                 :on-error="uploadError"
@@ -39,10 +39,10 @@
               </MDinput>
             </el-form-item>
             <el-form-item  style="text-align: center;">
-               <el-button type="primary" size="mini"  @click="saveConfigBase()">
+               <el-button type="primary" size="medium"  @click="saveConfigBase()">
                  修改 / Comfirm
                </el-button>
-               <el-button type="info" size="mini" @click="reset()">
+               <el-button type="info" size="medium" @click="reset()">
                  取消 / Cancel
                </el-button>
              </el-form-item>
@@ -69,10 +69,10 @@
               </MDinput>
             </el-form-item>
             <el-form-item  style="text-align: center;">
-               <el-button type="primary" size="mini"  @click="saveConfigSms()">
+               <el-button type="primary" size="medium"  @click="saveConfigSms()">
                  修改 / Comfirm
                </el-button>
-               <el-button type="info" size="mini" @click="reset()">
+               <el-button type="info" size="medium" @click="reset()">
                  取消 / Cancel
                </el-button>
              </el-form-item>
@@ -98,10 +98,10 @@
               </MDinput>
             </el-form-item>
             <el-form-item  style="text-align: center;">
-               <el-button type="primary" size="mini"  @click="saveConfigMch()">
+               <el-button type="primary" size="medium"  @click="saveConfigMch()">
                  修改 / Comfirm
                </el-button>
-               <el-button type="info" size="mini" @click="reset()">
+               <el-button type="info" size="medium" @click="reset()">
                  取消 / Cancel
                </el-button>
              </el-form-item>
@@ -179,21 +179,17 @@ export default {
     getBaseconfig() {
       let that = this
       getBaseconfig().then((response)=>{
-        console.log(response.data)
         if(response.code == 9000){
           this.$router.push({ name: 'Page401'})
         }
-        let aa = response.data
-        aa.forEach(function(item,index){
-          if(item.config_name_other == 'miniapp_id'){that.temp.miniapp_id = item.config_value}
-          if(item.config_name_other == 'qrcode'){
-            that.temp.qrcode = item.config_value
-            that.is_show = true
-            }
-          if(item.config_name_other == 'telphone'){that.temp.telphone = item.config_value}
-          if(item.config_name_other == 'miniapp_secrets'){that.temp.miniapp_secrets = item.config_value}
-          if(item.config_name_other == 'tell_content'){that.temp.tell_content = item.config_value}
-        })
+        that.temp.miniapp_id = response.data.miniapp_id
+        that.temp.qrcode = response.data.qrcode
+        if(response.data.qrcode!=undefined && response.data.qrcode!=null && response.data.qrcode!=""){
+          that.is_show = true
+        }
+        that.temp.telphone = response.data.telphone
+        that.temp.miniapp_secrets = response.data.miniapp_secrets
+        that.temp.tell_content = response.data.tell_content
       })
     },
     getMsmConfig() {
@@ -202,12 +198,11 @@ export default {
         if(response.code == 9000){
           this.$router.push({ name: 'Page401'})
         }
-        let aa = response.data
-        aa.forEach(function(item,index){
-          if(item.config_name_other == 'sms_app_id'){that.temp2.sms_app_id = item.config_value}
-          if(item.config_name_other == 'sms_app_key'){that.temp2.sms_app_key = item.config_value}
-          if(item.config_name_other == 'sms_sign'){that.temp2.sms_sign = item.config_value}
-        })
+
+        that.temp2.sms_app_id = response.data.sms_app_id
+        that.temp2.sms_app_key = response.data.sms_app_key
+        that.temp2.sms_sign = response.data.sms_sign
+
       })
     },
     getMchConfig() {
@@ -216,12 +211,10 @@ export default {
         if(response.code == 9000){
           this.$router.push({ name: 'Page401'})
         }
-        let aa = response.data
-        aa.forEach(function(item,index){
-          if(item.config_name_other == 'mch_appid'){that.temp3.mch_appid = item.config_value}
-          if(item.config_name_other == 'mch_key'){that.temp3.mch_key = item.config_value}
-          if(item.config_name_other == 'url'){that.temp3.url = item.config_value}
-        })
+        that.temp3.mch_appid = response.data.mch_appid
+        that.temp3.mch_key = response.data.mch_key
+        that.temp3.url = response.data.url
+
       })
     },
     saveConfigBase(){
@@ -291,7 +284,7 @@ export default {
     },
     uploadSuccess(response,file,filelist){
       if(response.code == 200){
-        this.temp.qrcode = response.photo
+        this.temp.qrcode = response.qrcode
         this.is_show = true
         Message({
           title: '提示',

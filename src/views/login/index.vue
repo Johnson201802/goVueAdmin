@@ -1,5 +1,25 @@
 <template>
   <div class="login-container">
+    <div id="particles-js">
+      <vue-particles
+        color="#dedede"
+        :particleOpacity="0.7"
+        :particlesNumber="80"
+        shapeType="circle"
+        :particleSize="4"
+        linesColor="#dedede"
+        :linesWidth="1"
+        :lineLinked="true"
+        :lineOpacity="0.4"
+        :linesDistance="150"
+        :moveSpeed="3"
+        :hoverEffect="true"
+        hoverMode="grab"
+        :clickEffect="true"
+        clickMode="push"
+      />
+    </div>
+
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="off" label-position="left">
 
       <div class="title-container">
@@ -49,7 +69,7 @@
 
       <div style="position:relative">
         <div class="tips" style="text-align:center">
-          <span style="margin-right:18px;">@Copyright 2020 <a href="http://www.magiczh.com/" target="_blank">上海迈暨科技</a> -技术支持</span>
+          <span style="margin-right:18px;">@Copyright 2020 C+科技 - 技术支持</span>
           <!-- <span></span> -->
         </div>
 
@@ -205,8 +225,8 @@ export default {
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
 $bg:#283443;
-$light_gray:#fff;
-$cursor: #fff;
+$light_gray:#283443;
+$cursor: #283443;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
@@ -228,14 +248,14 @@ $cursor: #fff;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      color: #333;
       height: 47px;
       caret-color: $cursor;
 
       &:-webkit-autofill {
 
-        box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
+        box-shadow: 0 0 0px 1000px #D5D5E2 inset !important;
+        -webkit-text-fill-color: #434AE0 !important;
       }
     }
   }
@@ -250,30 +270,45 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
+$bg:#0e6cff;
 $dark_gray:#ffffff;
 $light_gray:#eee;
 
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-image:url(~@/assets/images/bg.jpg);
-  // background-color: $bg;
+  background-image:url(~@/assets/login.png);
+  background-color: $bg;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
+
+  #particles-js{
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+  }
 
   .login-form {
     position: relative;
-    width: 520px;
+    width: 620px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    padding: 50px 35px 50px 35px;
     margin: 0 auto;
+    z-index: 666;
     overflow: hidden;
+    background-color: rgba(255,255,255,1);
+    border-radius: 10px;
+    -webkit-box-shadow: 0 1px 10px 0px rgba(255,255,255,0.3);
+    box-shadow: 0 1px 10px 0px rgba(255,255,255,0.3);
   }
 
   .tips {
     font-size: 14px;
-    color: #fff;
-    margin-bottom: 10px;
+    color: rgba(51,51,51,0.6);
+    margin-top: 20px;
 
     span {
       &:first-of-type {
@@ -284,7 +319,7 @@ $light_gray:#eee;
 
   .svg-container {
     padding: 6px 5px 6px 15px;
-    color: $dark_gray;
+    color: #333;
     vertical-align: middle;
     width: 30px;
     display: inline-block;
@@ -295,7 +330,7 @@ $light_gray:#eee;
 
     .title {
       font-size: 26px;
-      color: $light_gray;
+      color: #333;
       margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;

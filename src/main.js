@@ -9,9 +9,15 @@ import enLang from 'element-ui/lib/locale/lang/zh-CN'// 如果使用中文语言
 
 import '@/styles/index.scss' // global css
 
+import BasicLayout from '@/layout/BasicLayout'
+Vue.component('BasicLayout', BasicLayout)
+
 import App from './App'
 import store from './store'
 import router from './router'
+
+import VueParticles from 'vue-particles'
+Vue.use(VueParticles)
 
 import './icons' // icon
 import './permission' // permission control

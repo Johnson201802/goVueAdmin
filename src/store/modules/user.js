@@ -57,7 +57,7 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       // console.log(state.token);
-      getInfo(state.token).then(response => {
+      getInfo().then(response => {
         // const { data } = response
         if (response.code == 600) {
           reject('登陆过期，请重新登陆..')

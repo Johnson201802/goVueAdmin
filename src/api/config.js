@@ -2,14 +2,14 @@ import request from '@/utils/request'
 
 export function getBaseconfig() {
   return request({
-    url: 'admin/admin/getBaseconfig',
+    url: 'getBaseconfig',
     method: 'get'
   })
 }
 
 export function saveConfigBase(data) {
   return request({
-    url: 'admin/admin/saveConfigBase',
+    url: 'saveConfigBase',
     method: 'post',
     data
   })
@@ -17,7 +17,7 @@ export function saveConfigBase(data) {
 
 export function getMsmConfig() {
   return request({
-    url: 'admin/admin/getMsmConfig',
+    url: 'getMsmConfig',
     method: 'get'
   })
 }
@@ -32,7 +32,7 @@ export function saveConfigSms(data) {
 
 export function getMchConfig() {
   return request({
-    url: 'admin/admin/getMchConfig',
+    url: 'getMchConfig',
     method: 'get'
   })
 }

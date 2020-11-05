@@ -564,13 +564,27 @@ export const asyncRoutes = [
   {
     path: '/config',
     component: Layout,
+    redirect: '/permission/page',
+    alwaysShow: true, // will always show the root menu
+    name: 'Permission',
+    meta: {
+      title: '系统管理',
+      icon: 'component'
+      // roles: ['admin', 'editor'] // you can set roles in root nav
+    },
     children: [
       {
         path: 'config',
         component: () => import('@/views/config/config'),
         name: 'config',
-        meta: { title: '系统设置', icon: 'component' }
-      }
+        meta: { title: '系统设置', icon: 'tree' }
+      },
+      {
+        path: 'sysinfo',
+        component: () => import('@/views/config/sysinfo'),
+        name: 'sysinfo',
+        meta: { title: '性能监控', icon: 'tree' }
+      },
     ]
   },
   {
