@@ -9,41 +9,59 @@
         </el-row>
         <el-row style="margin-bottom: 40px;">
           <el-col :span="24">
-            <el-form-item style="margin-bottom: 40px;" prop="goods_name">
-              <MDinput v-model="postForm.goods_name" :maxlength="100" name="goods_name" required>
-                商品标题（必填）
+            <el-form-item style="margin-bottom: 40px;" prop="Merchant_name">
+              <MDinput v-model="postForm.Name" :maxlength="100" name="Merchant_name" required>
+                商户名称（必填）
+              </MDinput>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row style="margin-bottom: 40px;">
+          <el-col :span="24">
+            <el-form-item style="margin-bottom: 40px;" prop="Merchant_name">
+              <MDinput v-model="postForm.Mobile" :maxlength="100" name="Merchant_name" required>
+                商户手机（必填）
               </MDinput>
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item  style="margin-bottom: 40px;" prop="thumb">
-          <el-col :span="24">
-            <Upload v-model="postForm.thumb" :value="postForm.thumb"/>
+          <el-col :span="11" style="margin-right: 20px;">
+            <Upload v-model="postForm.Img1" :value="postForm.Img1"/>
+          </el-col>
+          <el-col :span="11">
+            <Upload v-model="postForm.Img2" :value="postForm.Img2"/>
           </el-col>
         </el-form-item>
+          <el-row style="padding:20px 20px;border-radius: 5px;border: 1px dashed #d9d9d9;margin-bottom: 40px;">
+            <el-col :span="8">
+              <el-form-item prop="Merchant_desc" style="margin-bottom: 40px;padding:20px 20px;border-radius: 5px;">
+                <MDinput v-model="postForm.Longitude" :maxlength="100" name="Merchant_name" required>
+                  经度（地图选择）
+                </MDinput>
+              </el-form-item>
+             </el-col>
+             <el-col :span="8">
+              <el-form-item prop="Merchant_desc" style="margin-bottom: 40px;padding:20px 20px;border-radius: 5px;">
+                <MDinput v-model="postForm.Latitude" :maxlength="100" name="Merchant_name" required>
+                  纬度（地图选择）
+                </MDinput>
+              </el-form-item>
+              </el-col>
+              <el-col :span="8">
+              <el-form-item prop="Merchant_desc" style="margin-bottom: 40px;padding:20px 20px;border-radius: 5px;">
+                <MDinput v-model="postForm.Address" :maxlength="100" name="Merchant_name" required>
+                  地址（地图选择）
+                </MDinput>
+              </el-form-item>
+              </el-col>
+          </el-row>
           <el-row style="padding:20px 20px;border-radius: 5px;border: 1px dashed #d9d9d9;">
-            <el-col :span="10" style="display: flex;flex-direction: column;margin-left: 40px;">
-              <el-form-item prop="goods_price" style="margin-bottom: 40px;padding:20px 20px;border-radius: 5px;">
-                <MDinput v-model="postForm.goods_price" :maxlength="100" name="goods_price" required>
-                  商品价格（必填）
-                </MDinput>
+            <el-form-item style="margin-bottom: 40px;" prop="Merchant_name">
+              <el-form-item prop="Merchant_desc" style="margin-bottom: 40px;padding:20px 20px;border-radius: 5px;">
+                <iframe id="mapPage" width="100%" height="800px" frameborder=0 :src="getSrc"></iframe>
               </el-form-item>
-              <el-form-item prop="goods_account" style="margin-bottom: 40px;padding:20px 20px;border-radius: 5px;">
-                <MDinput v-model="postForm.goods_account" :maxlength="100" name="goods_account" required>
-                  商品库存（必填）
-                </MDinput>
-              </el-form-item>
-              <el-form-item prop="order" style="margin-bottom: 40px;padding:20px 20px;border-radius: 5px;">
-                <MDinput v-model="postForm.order" :maxlength="100" name="order" required>
-                  排序，数值越大越靠前，默认0
-                </MDinput>
-                </el-form-item>
-            </el-col>
-            <el-col :span="14">
-              <el-form-item prop="goods_desc" style="margin-bottom: 40px;padding:20px 20px;border-radius: 5px;">
-                <Tinymce ref="editor"  v-model="postForm.goods_desc" :height="667" :width="800" />
-              </el-form-item>
-            </el-col>
+            </el-form-item>
           </el-row>
       </div>
       <el-row style="padding: 10vh;">
@@ -57,32 +75,21 @@
 </template>
 
 <script>
-import Tinymce from '@/components/Tinymce'
 import Upload from '@/components/Upload/SingleImage3'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validURL } from '@/utils/validate'
-import { fetchOneGoods, updateGoods} from '@/api/goods'
+import { fetchOneMerchant, updateMerchant} from '@/api/merchant'
 import { searchUser } from '@/api/remote-search'
-import { createGoods } from '@/api/goods'
+import { createMerchant } from '@/api/merchant'
 import Warning from './Warning'
 import { Message } from 'element-ui'
 import ElDragSelect from '@/components/DragSelect' // base on element-ui
 import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
 
-const defaultForm = {
-  goods_name: '', // 商品标题
-  goods_price: '', // 商品价格
-  thumb: '', // 商品缩略图
-  goods_account: '', // 库存
-  goods_desc: '', // 商品详情
-  is_sale: '', // 是否上架
-  order: '', // 排序
-}
-
 export default {
   name: 'ArticleDetail',
-  components: { Tinymce , ElDragSelect , MDinput, Upload, Sticky, Warning, CommentDropdown, PlatformDropdown, SourceUrlDropdown },
+  components: { ElDragSelect , MDinput, Upload, Sticky, Warning, CommentDropdown, PlatformDropdown, SourceUrlDropdown },
   props: {
     isEdit: {
       type: Boolean,
@@ -117,18 +124,28 @@ export default {
       }
     }
     return {
-      postForm: Object.assign({}, defaultForm),
+      postForm: {
+                  Name: '', // 商品标题
+                  Mobile: undefined, // 手机号
+                  Img1: '', // 门头缩略图
+                  Img2: '', // 内部缩略图
+                  Longitude: undefined, // 经度
+                  Latitude: undefined, // 纬度
+                  Address: '' // 地址,
+                  },
       loading: false,
       userListOptions: [],
       options: [],
       cates: [],
       label: ['1','2'],
       rules: {
-        goods_name: [{ required: true, message: '请填写商品名称', trigger: 'blur' }],
-        goods_price: [{ required: true, message: '请填写商品价格', trigger: 'blur' }],
-        thumb: [{ required: true, message: '请上传缩略图', trigger: 'change' }],
-        goods_account: [{ required: true, message: '请填写库存', trigger: 'blur' }],
-        goods_desc: [{ required: true, message: '请填写商品详情', trigger: 'blur' }],
+        Name: [{ required: true, message: '请填写商户名称', trigger: 'blur' }],
+        Mobile: [{ required: true, message: '请填写商户手机', trigger: 'blur' }],
+        Img1: [{ required: true, message: '请上传门头照', trigger: 'change' }],
+        Img2: [{ required: true, message: '请上传内部照', trigger: 'blur' }],
+        Longitude: [{ required: true, message: '请选择商户地址', trigger: 'blur' }],
+        Latitude: [{ required: true, message: '请选择商户地址', trigger: 'blur' }],
+        Address: [{ required: true, message: '请选择商户地址', trigger: 'blur' }],
       },
       tempRoute: {}
     }
@@ -148,7 +165,14 @@ export default {
       set(val) {
         this.postForm.display_time = new Date(val)
       }
-    }
+    },
+    getSrc() {
+                var baseUrl = 'https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=GHYBZ-A466U-EJ3VU-2OH33-YZ3ZK-BFFYY&referer=piduopiweb'
+                if (this.lat && this.lng) {
+                    baseUrl += `&coord=${this.lat},${this.lng}`
+                }
+                return baseUrl
+          }
   },
   created() {
     if (this.isEdit) {
@@ -161,9 +185,27 @@ export default {
     // https://github.com/PanJiaChen/vue-element-admin/issues/1221
     this.tempRoute = Object.assign({}, this.$route)
   },
+  mounted() {
+      var self = this
+      window.addEventListener('message', function(event) {
+          // 对于无法识别的地址，直接返回无法选择
+          var loc = event.data
+          console.log(loc)
+          self.postForm.Latitude = loc.latlng.lat
+          self.postForm.Longitude = loc.latlng.lng
+          self.postForm.Address = loc.poiaddress
+          // if (loc.poiname === '我的位置' || loc.poiaddress === '') {
+          //     self.$toast('无法识别该地址，请移动地图重新选择')
+          //     return false
+          // }
+          // if (loc && loc.module === 'locationPicker') { // 防止其他应用也会向该页面post信息，需判断module是否为'locationPicker'
+          //     self.$emit('callback', loc)
+          // }
+      }, false)
+  },
   methods: {
     fetchData(id) {
-      fetchOneGoods(id).then(response => {
+      fetchOneMerchant(id).then(response => {
         this.postForm = response.data
 
         // just for test
@@ -189,14 +231,17 @@ export default {
       })
     },
     submitFormAdd() {
-      this.loading = true
+      // this.loading = true
       this.$refs.postForm.validate(valid => {
         if (valid) {
-          createGoods(this.postForm).then((response)=>{
+          Number(this.postForm.Mobile)
+          Number(this.postForm.Latitude)
+          Number(this.postForm.Longitude)
+          createMerchant(this.postForm).then((response)=>{
            if(response.code == 200){
              this.$notify({
                title: '提示',
-               message: '商品创建成功',
+               message: '商户创建成功',
                type: 'success',
                duration: 5000
              })
@@ -218,15 +263,13 @@ export default {
     },
     submitFormEdit(){
       this.loading = true
-      console.log(this.postForm)
       this.$refs.postForm.validate(valid => {
         if (valid) {
-          updateGoods(this.postForm).then((response)=>{
-            console.log(response)
+          updateMerchant(this.postForm).then((response)=>{
             if(response.code == 200){
               this.$notify({
                 title: '提示',
-                message: '更新商品成功',
+                message: '更新商户成功!',
                 type: 'success',
                 duration: 5000
               })

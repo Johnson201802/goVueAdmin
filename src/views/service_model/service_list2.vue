@@ -1,10 +1,5 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
-      <el-button v-waves class="filter-item" type="primary"  @click="handleCreate">
-        添加 / Add
-      </el-button>
-    </div>
 
     <el-table
       :key="tableKey"
@@ -18,37 +13,32 @@
     >
       <el-table-column label="ID" prop="id"  align="center" min-width="80px">
         <template slot-scope="{row}">
-          <span>{{ row.Service_id }}</span>
+          <span>{{ row.Card_id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="服务名称" min-width="120px" align="center">
+      <el-table-column label="会员卡名称" min-width="120px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.Service_name }}</span>
+          <span>{{ row.Title }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="服务ICON" min-width="80px" align="center">
+      <el-table-column label="价格" min-width="80px" align="center">
         <template slot-scope="{row}">
-          <a :href="row.Icon" target="_blank"><img :src="row.Icon" class="user-avatar"></a>
+          <span>{{ row.Price }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="原价" min-width="80px" align="center">
+      <el-table-column label="描述" min-width="80px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.Origin_price }}</span>
+          <span>{{ row.Desc }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="现价" min-width="80px" align="center">
+      <el-table-column label="月数" min-width="80px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.Now_price}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="所属商户" min-width="200px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.Name }}</span>
+          <span>{{ row.Days}}</span>
         </template>
       </el-table-column>
       <el-table-column label="是否上架" min-width="80px" align="center">
         <template slot-scope="{row}">
-          <el-switch v-model="row.Is_sale" active-value="1" active-color="#13ce66" inactive-color="#ff4949" inactive-value="0" @change="changeSwitch(row)"></el-switch>
+          <el-switch v-model="row.Status" active-value="1" active-color="#13ce66" inactive-color="#ff4949" inactive-value="0" @change="changeSwitch(row)"></el-switch>
         </template>
       </el-table-column>
 
@@ -56,9 +46,6 @@
         <template slot-scope="{row,$index}">
           <el-button type="success" size="mini" @click="handleUpdate(row)">
             修改
-          </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index,row.Id)">
-            删除
           </el-button>
         </template>
       </el-table-column>
@@ -68,33 +55,18 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="150px" style="width: 600px; margin-left:50px;">
-        <el-form-item label="商户选择" prop="present_name">
-          <el-select v-model="temp.Pid" class="filter-item" placeholder="请选择所属商户">
-            <el-option v-for="(item,index) in merchant" :key="item.Merchant_id" :label="item.Name" :value="item.Merchant_id" />
-          </el-select>
+        <el-form-item label="会员卡名称" prop="present_name">
+          <el-input v-model="temp.Title" />
         </el-form-item>
-        <el-form-item label="服务名称" prop="present_name">
-          <el-input v-model="temp.Service_name" />
+        <el-form-item label="价格" prop="chip_amount">
+          <el-input v-model="temp.Price" />
         </el-form-item>
-        <el-form-item label="服务原价" prop="chip_amount">
-          <el-input v-model="temp.Origin_price" />
+        <el-form-item label="描述" prop="total_amount">
+          <el-input v-model="temp.Desc" />
         </el-form-item>
-        <el-form-item label="服务现价" prop="total_amount">
-          <el-input v-model="temp.Now_price" />
+        <el-form-item label="月数" prop="total_amount">
+          <el-input v-model="temp.Days" />
         </el-form-item>
-        <el-form-item label="服务ICON">
-          <el-upload
-            list-type="none"
-            action="https://api.piduopi.com/imgUploads"
-            accept="image/jpeg,image/jpg,image/gif,image/png"
-            :limit="1"
-            :on-error="uploadError"
-            :on-success="uploadSuccess"
-            >
-            <div  style="max-width:400px;display: flex;justify-content:center;align-items: center;border:1px dashed #d9d9d9;font-size: large;" ><i v-show="!is_show" style='padding:100px' class="el-icon-plus" /><img :src="temp.Icon" v-show="is_show"  class="user-avatar22" style="padding:20px 20px;"></div>
-           </el-upload>
-        </el-form-item>
-
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -120,7 +92,7 @@
 
 <script>
 import { Message } from 'element-ui'
-import { fetchServicesList , createService , delPresent ,getMerchant , updateService, changeStatus} from '@/api/services'
+import { getCardList , createService , delPresent  , updateCard, changeStatus2} from '@/api/services'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -185,12 +157,12 @@ export default {
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
-        Service_name:'',
-        Origin_price:undefined,
-        Now_price:undefined,
-        Is_sale:"1",
-        Pid:"",
-        Icon:''
+        Card_id:0,
+        Title:'',
+        Price:0,
+        Desc:'',
+        Days:0,
+        Status:1
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -212,7 +184,6 @@ export default {
   },
   created() {
     this.getList()
-    this.getMerchant()
   },
   computed: {
     ...mapGetters([
@@ -222,12 +193,12 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchServicesList(this.listQuery).then(response => {
+      getCardList().then(response => {
         if(response.code == 9000){
           this.$router.push({ name: 'Page401'})
         }else{
+          console.log(response.data)
           this.list = response.data
-          this.total = response.total
         }
         // Just to simulate the time of the request
         setTimeout(() => {
@@ -266,9 +237,9 @@ export default {
     },
     changeSwitch (row) {
          let row2 = Object.assign({}, row)
-         changeStatus(row2.Service_id,row2.Is_sale).then((response=>{
+         changeStatus2(row2.Card_id,row2.Status).then((response=>{
             if(response.code == 200 ){
-              if(row2.Is_sale == 1){
+              if(row2.Status == '1'){
                 Message({
                   title: '提示',
                   message: '开启成功',
@@ -359,20 +330,16 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        Service_name:'',
-        Origin_price:undefined,
-        Now_price:undefined,
-        Is_sale:"1",
-        Pid:"",
-        Icon:''
+        Card_id:0,
+        Title:'',
+        Price:0,
+        Desc:'',
+        Days:0,
+        Status:1
       }
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      let Icon = this.temp.Icon
-      if(Icon != ''){
-        this.is_show = true;
-      }
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -383,8 +350,9 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           let tempData = Object.assign({}, this.temp)
-          updateService(tempData).then((response) => {
-            const index = this.list.findIndex(v => v.Merchant_id === this.temp.Merchant_id)
+          tempData.Price = Number(tempData.Price)
+          updateCard(tempData).then((response) => {
+            const index = this.list.findIndex(v => v.Card_id === this.temp.Card_id)
             this.list.splice(index, 1, this.temp)
             this.dialogFormVisible = false
             if(response.code == 200){

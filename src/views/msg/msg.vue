@@ -1,15 +1,5 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder=" 微信昵称 " style="width: 300px;text-align: center;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
-      </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        搜索 / Search
-      </el-button>
-    </div>
-
     <el-table
       :key="tableKey"
       v-loading="listLoading"
@@ -20,46 +10,38 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="ID" prop="id" sortable="custom" align="center" min-width="80px" :class-name="getSortClass('id')">
+      <el-table-column label="ID" prop="id" sortable="custom" align="center" min-width="30px" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.User_id }}</span>
+          <span>{{ row.Question_id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="微信昵称" min-width="60px" align="center">
+      <el-table-column label="微信昵称" min-width="30px" align="center">
         <template slot-scope="{row}">
           <span class="" @click="handleUpdate(row)">{{ row.Nick_name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="头像" min-width="60px" align="center">
+      <el-table-column label="头像" min-width="30px" align="center">
         <template slot-scope="{row}">
           <a :href="row.Avatar" target="_blank"><img :src="row.Avatar" class="user-avatar"></a>
         </template>
       </el-table-column>
-      <el-table-column label="手机" min-width="80px" align="center">
+      <el-table-column label="手机" min-width="40px" align="center">
         <template slot-scope="{row}">
           <span class="" @click="handleUpdate(row)">{{ row.Phone }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="是否商户" align="center" min-width="150px">
+      <el-table-column label="反馈内容" min-width="300px" align="left">
         <template slot-scope="{row}">
-          <span class="" @click="handleUpdate(row)">{{row.Merchant_id==""?"否":"是"}}</span>
+          <span class="" >{{ row.Content }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="是否VIP" align="center" min-width="150px">
-        <template slot-scope="{row}">
-          <span class="" @click="handleUpdate(row)">{{row.Is_vip=="0"?"否":"是"}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="注册时间" max-width="100px" align="center">
-        <template slot-scope="{row}">
-          {{row.Expire_vip_time  | parseTime('{y}-{m}-{d}')}}
-        </template>
-      </el-table-column>
-
-      <el-table-column label="操作" align="center" width="80px" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="120px" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index,row.user_id)">
-            删除
+          <el-button v-if="row.Is_read=='0'" size="mini" type="success" @click="SetRead(row.Question_id)">
+            设为已读
+          </el-button>
+          <el-button v-if="row.Is_read=='1'" disabled size="mini" type="success">
+            设为已读
           </el-button>
         </template>
       </el-table-column>
@@ -71,7 +53,7 @@
 <script>
 import { Message } from 'element-ui'
 import ImageCropper from '@/components/ImageCropper'
-import { fetchList , changeRole , delUser } from '@/api/user_front'
+import { SetRead , getQuestionList } from '@/api/user_front'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -118,8 +100,6 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        title: undefined,
-        sort: '+id'
       },
       importanceOptions: [{'key':1,'name':'是'},{'key':0,'name':'否'}],
       calendarTypeOptions,
@@ -137,19 +117,35 @@ export default {
     getList() {
       let that = this
       that.listLoading = true
-      fetchList(that.listQuery).then(response => {
-        console.log(response)
+      getQuestionList(that.listQuery).then(response => {
         if(response.code == 9000){
           that.$router.push({ name: 'Page401'})
         }else{
           that.list = response.data
-          that.total = response.total
-          console.log(response)
+          that.total = response.count
         }
         // Just to simulate the time of the request
         setTimeout(() => {
           that.listLoading = false
         }, 1.5 * 1000)
+      })
+    },
+    SetRead(id){
+      let that = this
+      SetRead(id).then(response => {
+        if(response.code == 9000){
+          that.$router.push({ name: 'Page401'})
+        }else{
+          if(response.code == 200){
+            that.getList()
+            Message({
+              title: 'Notice',
+              message: '操作成功！',
+              type: 'success',
+              duration: 2000
+            })
+          }
+        }
       })
     },
     handleFilter() {

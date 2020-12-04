@@ -27,3 +27,10 @@ export function cardData() {
     method: 'get'
   })
 }
+
+export function getNewMsg() {
+  return request({
+    url: '/getNewMsg', // vue-element-admin/article/list
+    method: 'get'
+  })
+}

@@ -21,23 +21,23 @@
     >
       <el-table-column label="ID" prop="id" sortable="order" align="center" width="150px" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
+          <span>{{ row.Id }}</span>
         </template>
       </el-table-column>
       <el-table-column label="账号" width="200px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.title }}</span>
+          <span>{{ row.Title }}</span>
         </template>
       </el-table-column>
       <el-table-column label="已有权限" min-width="150px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.name }}</span>
+          <span>{{ row.Name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" class-name="status-col" width="150px">
         <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
-            {{ row.status===1?'启用':'未启用' }}
+          <el-tag :type="row.Status | statusFilter">
+            {{ row.Status===1?'启用':'未启用' }}
           </el-tag>
         </template>
       </el-table-column>
@@ -46,7 +46,7 @@
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index,row.id)">
+          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index,row.Id)">
             删除
           </el-button>
         </template>
@@ -58,18 +58,18 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 400px; margin-left:50px;">
         <el-form-item label="用户组名称" prop="title">
-          <el-input v-model="temp.title" />
+          <el-input v-model="temp.Title" />
         </el-form-item>
         <el-form-item label="用户组描述">
           <el-input
-            v-model="temp.description"
+            v-model="temp.Description"
             :autosize="{ minRows: 2, maxRows: 4}"
             type="textarea"
             placeholder="用户组描述"
           />
         </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-select v-model="temp.status" class="filter-item" placeholder="请设置状态">
+          <el-select v-model="temp.Status" class="filter-item" placeholder="请设置状态">
             <el-option v-for="(item,i) in statusOptions" :key="item.key" :label="item.name" :value="item.key" />
           </el-select>
         </el-form-item>
@@ -159,12 +159,11 @@ export default {
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: [{ 'key': 1, 'name': '启用' }, { 'key': 0, 'name': '不启用' }],
       temp: {
-        id: undefined,
-        title: '',
-        name: '',
-        status: '',
-        routes: [],
-        description: ''
+        Id: undefined,
+        Title: '',
+        Status: '',
+        Rules: '',
+        Description: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -175,9 +174,9 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        status: [{ required: true, message: '请选择状态', trigger: 'change' }],
-        name: [{ required: true, message: '方法路径不能为空', trigger: 'blur' }],
-        title: [{ required: true, message: '用户组名称不能为空', trigger: 'blur' }]
+        Status: [{ required: true, message: '请选择状态', trigger: 'change' }],
+        Name: [{ required: true, message: '方法路径不能为空', trigger: 'blur' }],
+        Title: [{ required: true, message: '用户组名称不能为空', trigger: 'blur' }]
       },
       downloadLoading: false
     }
@@ -198,8 +197,8 @@ export default {
         if (response.code == 9000) {
           this.$router.push({ name: 'Page401' })
         } else {
-          this.list = response.data.items
-          this.total = response.data.total
+          this.list = response.data
+          this.total = response.total
         }
 
         // Just to simulate the time of the request
@@ -228,7 +227,7 @@ export default {
         message: '操作Success',
         type: 'success'
       })
-      row.status = status
+      row.Status = Status
     },
     sortChange(data) {
       const { prop, order } = data
@@ -246,12 +245,11 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        id: undefined,
-        title: '',
-        name: '',
-        status: '',
-        routes: '',
-        description: ''
+        Id: undefined,
+        Title: '',
+        Status: '',
+        Rules: '',
+        Description: ''
       }
       this.defaultCheckedKeys = []
     },
@@ -276,7 +274,8 @@ export default {
           checkedKeys.forEach(function(item, index) {
             str += item + ','
           })
-          that.temp.routes = str
+          that.temp.Rules = str
+          // console.log(str)
           // 向后台发送请求
           addRole(that.temp).then(response => {
             const code = response.code
@@ -284,8 +283,8 @@ export default {
             const id = response.id
 
             if (code == 200) {
-              that.temp.id = id
-              that.temp.status = 1
+              that.temp.Id = id
+              that.temp.Status = 1
               that.getList()
               that.dialogFormVisible = false
               that.$notify({
@@ -345,7 +344,7 @@ export default {
               str += item + ','
             }
           })
-          this.temp.routes = str
+          this.temp.Rules = str
           const tempData = Object.assign({}, this.temp)
           updateRole(tempData).then((response) => {
             const code = response.code
@@ -424,8 +423,8 @@ export default {
         // }
 
         const data = {
-          title: route.title,
-          id: route.id
+          title: route.Title,
+          id: route.Id
 
         }
 

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder=" 商品标题 " style="width: 300px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" placeholder=" 商户标题 " style="width: 300px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索 / Search
       </el-button>
@@ -20,64 +20,60 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="ID" prop="goods_id" align="center" min-width="60px">
+      <el-table-column label="ID" prop="Merchant_id" align="center" min-width="60px">
         <template slot-scope="{row}">
-          <span>{{ row.goods_id }}</span>
+          <span>{{ row.Merchant_id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="商品标题" min-width="200px">
+      <el-table-column label="商户名称" min-width="120px">
         <template slot-scope="{row}">
-          <span  @click="handleUpdate(row)" style="display:block;text-overflow:ellipsis;white-space:wrap;overflow:hidden;">{{ row.goods_name }}</span>
+          <span  @click="handleUpdate(row)" style="display:block;text-overflow:ellipsis;white-space:wrap;overflow:hidden;">{{ row.Name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="商品主图" min-width="100px" align="center">
+      <el-table-column label="商户门头" min-width="100px" align="center">
         <template slot-scope="{row}">
-          <a v-if="row.thumb!=''?true:false" :href="row.thumb" target="_blank"><img :src="row.thumb" class="goods_photo"></a>
-          <span v-if="row.thumb==''?true:false">没有图片</span>
+          <a v-if="row.Img1!=''?true:false" :href="row.Img1" target="_blank"><img :src="row.Img1" class="Merchant_photo"></a>
+          <span v-if="row.Img1==''?true:false">没有图片</span>
         </template>
       </el-table-column>
-      <el-table-column label="价格" min-width="60px" align="center">
+      <el-table-column label="商户内部" min-width="100px" align="center">
         <template slot-scope="{row}">
-          <span  @click="handleUpdate(row)" style="">{{ row.goods_price }}</span>
+          <a v-if="row.Img2!=''?true:false" :href="row.Img2" target="_blank"><img :src="row.Img2" class="Merchant_photo22"></a>
+          <span v-if="row.Img2==''?true:false">没有图片</span>
         </template>
       </el-table-column>
-      <el-table-column label="库存" min-width="60px" align="center">
+      <el-table-column label="手机" min-width="60px" align="center">
         <template slot-scope="{row}">
-          <span style="">{{ row.goods_account }}</span>
+          <span style="">{{ row.Mobile }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="已售" min-width="60px" align="center">
+      <el-table-column label="地址" min-width="150px" align="center">
         <template slot-scope="{row}">
-          <span style="">{{ row.sale_amount }}</span>
+          <span style="">{{ row.Address }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="会员免费" min-width="80px" align="center">
+     <el-table-column label="二维码" min-width="80px" align="center">
         <template slot-scope="{row}">
-          <el-switch v-model="row.flag" active-value="1" active-color="#5E00FF" inactive-color="#ff4949" inactive-value="0" @change="changeGoodsFee(row.goods_id,row.flag)"></el-switch>
-        </template>
-      </el-table-column>
-      <el-table-column label="是否上架" min-width="80px" align="center">
-        <template slot-scope="{row}">
-          <el-switch v-model="row.is_sale" active-value="1" active-color="#13ce66" inactive-color="#ff4949" inactive-value="0" @change="changeGoodsStatus(row.goods_id,row.is_sale)"></el-switch>
+          <a v-if="row.Qrcode!=''?true:false" :href="row.Qrcode" target="_blank"><img :src="row.Qrcode" class="Merchant_photo22"></a>
         </template>
       </el-table-column>
       <el-table-column label="排序" min-width="80px" align="center">
         <template slot-scope="{row}">
-          <el-input  align="center" v-model="row.order" @blur="sortGoods(row.goods_id,row.order)"/>
+          <el-input  align="center" v-model="row.Order" @blur="sortMerchant(row.Merchant_id,row.Order)"/>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" min-width="60px" align="center">
         <template slot-scope="{row}">
-          <span @click="handleUpdate(row)">{{ row.time  | parseTime('{y}-{m}-{d}')}}</span>
+          <span @click="handleUpdate(row)">{{ row.Create_time  | parseTime('{y}-{m}-{d}')}}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row.goods_id)">
+          <el-button type="primary" size="mini" @click="handleUpdate(row.Merchant_id)">
             编辑
           </el-button>
-          <el-button  size="mini" type="danger" @click="handleDelete(row,$index,row.goods_id)">
+          <el-button  size="mini" type="danger" @click="handleDelete(row,$index,row.Merchant_id)">
             删除
           </el-button>
         </template>
@@ -124,7 +120,7 @@
             :on-error="uploadError"
             :on-success="uploadSuccess"
             >
-            <div  style="max-width:400px;display: flex;justify-content:center;align-items: center;border:1px dashed #d9d9d9;font-size: large;" ><i v-show="!is_show" style='padding:100px' class="el-icon-plus" /><img :src="temp.image_url" v-show="is_show"  class="goods_photo"></div>
+            <div  style="max-width:400px;display: flex;justify-content:center;align-items: center;border:1px dashed #d9d9d9;font-size: large;" ><i v-show="!is_show" style='padding:100px' class="el-icon-plus" /><img :src="temp.image_url" v-show="is_show"  class="Merchant_photo"></div>
            </el-upload>
           <!-- <div @click="chooseImg" style="max-width:400px;display: flex;justify-content:center;align-items: center;border:1px dashed #d9d9d9;font-size: large;" ><i v-show="!is_show" style='padding:100px' class="el-icon-plus" /><img :src="temp.image_url" v-show="is_show"  class="user-avatar22"></div> -->
         </el-form-item>
@@ -154,7 +150,7 @@
 <script>
 import { Message } from 'element-ui'
 import ImageCropper from '@/components/ImageCropper'
-import { fetchGoodsList, sortGoods, changeGoodsStatus, changeGoodsFee, delGoods } from '@/api/goods'
+import { fetchMerchantList, sortMerchant, changeMerchantStatus, changeMerchantFee, delMerchant } from '@/api/merchant'
 import { parseTime } from '@/utils'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -206,8 +202,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        title: undefined,
-        cate_id:undefined
+        title: undefined
       },
       importanceOptions: [{'key':1,'name':'是'},{'key':0,'name':'否'}],
       calendarTypeOptions,
@@ -250,12 +245,12 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchGoodsList(this.listQuery).then(response => {
+      fetchMerchantList(this.listQuery.page,this.listQuery.limit,this.listQuery.title).then(response => {
         if(response.code == 9000){
           this.$router.push({ name: 'Page401'})
         }else{
-          this.list = response.data.items
-          this.total = response.data.total
+          this.list = response.data
+          this.total = response.total
         }
 
         // Just to simulate the time of the request
@@ -284,8 +279,8 @@ export default {
         })
       }
     },
-    changeGoodsStatus (id,status) {
-       changeGoodsStatus(id,status).then((response=>{
+    changeMerchantStatus (id,status) {
+       changeMerchantStatus(id,status).then((response=>{
           if(response.code == 200 ){
             if(status == 1){
               Message({
@@ -312,8 +307,8 @@ export default {
           }
        }))
   },
-  changeGoodsFee (id,flag) {
-       changeGoodsFee(id,flag).then((response=>{
+  changeMerchantFee (id,flag) {
+       changeMerchantFee(id,flag).then((response=>{
           if(response.code == 200 ){
             if(flag == 1){
               Message({
@@ -340,8 +335,8 @@ export default {
           }
        }))
   },
-    sortGoods(article_id,sort){
-      sortGoods(article_id,sort).then((response)=>{
+    sortMerchant(article_id,sort){
+      sortMerchant(article_id,sort).then((response)=>{
           if(response.code  == 200){
             this.getList()
             Message({
@@ -372,7 +367,7 @@ export default {
     //   row.status = status
     // },
     handleCreate() {
-      this.$router.push({ path: '/goods/goods_create'})
+      this.$router.push({ path: '/Merchant/Merchant_create'})
     },
     createData() {
       this.$refs['dataForm'].validate((valid) => {
@@ -432,7 +427,7 @@ export default {
       }
     },
     handleUpdate(id) {
-      this.$router.push({ name:'goods_edit',params:{id:id}})
+      this.$router.push({ name:'merchant_edit',params:{id:id}})
     },
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
@@ -467,7 +462,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async() => {
-          delGoods(id).then(response => {
+          delMerchant(id).then(response => {
             let code = response.code
             let msg = response.msg
             if(code == 200){
@@ -536,9 +531,14 @@ export default {
 }
 </script>
 <style>
-  .goods_photo {
+  .Merchant_photo {
     cursor: pointer;
     max-width: 60px;
+    border-radius: 5px;
+  }
+  .Merchant_photo22{
+    cursor: pointer;
+    max-width: 120px;
     border-radius: 5px;
   }
 </style>

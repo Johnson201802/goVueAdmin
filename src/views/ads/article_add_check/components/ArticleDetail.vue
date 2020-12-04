@@ -10,7 +10,7 @@
         <el-row>
           <el-col :span="11">
             <el-form-item style="margin-bottom: 40px;" prop="title">
-              <MDinput v-model="postForm.title" :maxlength="100" name="name" required>
+              <MDinput v-model="postForm.Title" :maxlength="100" name="name" required>
                 文章标题
               </MDinput>
             </el-form-item>
@@ -18,7 +18,7 @@
         </el-row>
         <el-form-item prop="content" style="margin-bottom: 30px;">
           <el-col :span="11">
-          <Tinymce ref="editor"  v-model="postForm.content" :height="500" :width="800"/>
+          <Tinymce ref="editor"  v-model="postForm.Content" :height="500" :width="800"/>
           </el-col>
         </el-form-item>
       </div>
@@ -96,8 +96,8 @@ export default {
       cates: [],
       label: ['1','2'],
       rules: {
-        title: [{ required: true, message: '请填写标题', trigger: 'blur' }],
-        content: [{ required: true, message: '内容不能为空', trigger: 'blur' }],
+        Title: [{ required: true, message: '请填写标题', trigger: 'blur' }],
+        Content: [{ required: true, message: '内容不能为空', trigger: 'blur' }],
       },
       tempRoute: {}
     }

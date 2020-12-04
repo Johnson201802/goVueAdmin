@@ -25,7 +25,7 @@ export function getPostInfo(id) {
 
 export function fetchOrderList(query) {
   return request({
-    url: 'admin/admin/fetchOrderList',
+    url: '/fetchOrderList',
     method: 'get',
     params: query
   })
@@ -73,7 +73,7 @@ export function checkOut(id) {
 
 export function delOrder(id) {
   return request({
-    url: `admin/admin/delOrder`,
+    url: `/delOrder`,
     method: 'post',
     params: { id: id }
   })

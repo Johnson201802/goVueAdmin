@@ -70,19 +70,19 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/401'),
     hidden: true
   },
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'dashboard',
-        meta: { title: '主页', icon: 'dashboard', affix: true }
-      }
-    ]
-  },
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   redirect: '/dashboard',
+  //   children: [
+  //     {
+  //       path: 'dashboard',
+  //       component: () => import('@/views/dashboard/index'),
+  //       name: 'dashboard',
+  //       meta: { title: '主页', icon: 'dashboard', affix: true }
+  //     }
+  //   ]
+  // },
   {
     path: '/user',
     component: Layout,
@@ -97,36 +97,24 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/user/index'),
         name: 'user_list',
-        meta: { title: '用户列表' }
+        meta: { title: '用户列表' , affix: true}
       }
     ]
   },
   {
     path: '/ads',
     component: Layout,
-    redirect: '/carousel',
+    redirect: '/articles/index',
     name: 'ads',
     meta: {
-      title: '广告位管理',
+      title: '内容管理',
       icon: 'example'
     },
     children: [
       {
-        path: 'ads_cates',
-        component: () => import('@/views/ads/ads_cates'),
-        name: 'ads_cates',
-        meta: { title: '分类管理' }
-      },
-      {
-        path: 'ads_content',
-        component: () => import('@/views/ads/ads_content'),
-        name: 'ads_content',
-        meta: { title: '内容管理' }
-      },
-      {
         path: 'articles',
         component: () => import('@/views/ads/articles'),
-        name: 'ads_content',
+        name: 'articles',
         meta: { title: '文章管理' }
       },
       {
@@ -146,89 +134,35 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/goods',
+    path: '/merchant',
     component: Layout,
-    redirect: '/goods',
-    name: 'goods',
+    redirect: '/merchant',
+    name: 'merchant',
     meta: {
-      title: '商品管理',
+      title: '商户管理',
       icon: 'excel'
     },
     children: [
       {
-        path: 'goods',
-        component: () => import('@/views/goods/goods'),
-        name: 'goods',
-        meta: { title: '商品管理' }
+        path: 'merchant',
+        component: () => import('@/views/merchant/merchant'),
+        name: 'merchant',
+        meta: { title: '商户管理' }
       },
       {
-        path: 'goods_create',
-        component: () => import('@/views/goods/goods_add_check/create'),
-        name: 'goods_create',
+        path: 'merchant_create',
+        component: () => import('@/views/merchant/merchant_add_check/create'),
+        name: 'merchant_create',
         hidden: true,
-        meta: { title: '添加商品' }
+        meta: { title: '添加商户' }
       },
       {
-        path: 'goods_edit',
-        component: () => import('@/views/goods/goods_add_check/edit'),
-        name: 'goods_edit',
+        path: 'merchant_edit',
+        component: () => import('@/views/merchant/merchant_add_check/edit'),
+        name: 'merchant_edit',
         hidden: true,
-        meta: { title: '编辑商品' }
+        meta: { title: '编辑商户' }
       }
-    ]
-  },
-  {
-    path: '/recharge',
-    component: Layout,
-    redirect: '/recharge',
-    name: 'recharge',
-    meta: { title: '充值管理', icon: 'guide', noCache: true },
-    children: [
-      {
-        path: 'rechargeList',
-        component: () => import('@/views/recharge/rechargeList'),
-        name: 'rechargeList',
-        meta: { title: '充值列表', noCache: true }
-      },
-      {
-        path: 'rechargeCountConfig',
-        component: () => import('@/views/recharge/rechargeCountConfig'),
-        name: 'rechargeCountConfig',
-        meta: { title: '金额配置', noCache: true }
-      }
-    ]
-  },
-  {
-    path: '/integral',
-    component: Layout,
-    redirect: '/integral',
-    name: 'integral',
-    meta: { title: '积分管理', icon: 'table', noCache: true },
-    children: [
-      {
-        path: 'rechargeConfig',
-        component: () => import('@/views/recharge/rechargeConfig'),
-        name: 'rechargeConfig',
-        meta: { title: '等级配置', noCache: true }
-      },
-      {
-        path: 'register',
-        component: () => import('@/views/integral/register'),
-        name: 'register',
-        meta: { title: '签到配置', noCache: true }
-      },
-      {
-        path: 'register_leiji',
-        component: () => import('@/views/integral/register_leiji'),
-        name: 'register_leiji',
-        meta: { title: '累计配置', noCache: true }
-      }
-      // {
-      //   path: 'buRegister',
-      //   component: () => import('@/views/integral/buRegister'),
-      //   name: 'buRegister',
-      //   meta: { title: '补签到配置', noCache: true }
-      // }
     ]
   },
   {
@@ -236,46 +170,43 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/services_model2',
     name: 'services_model2',
-    meta: { title: '营销管理', icon: 'list', noCache: true },
+    meta: { title: '服务管理', icon: 'list', noCache: true },
     children: [
       {
         path: 'service_list',
         component: () => import('@/views/service_model/service_list'),
         name: 'service_model',
-        meta: { title: '礼品仓库', noCache: true }
-      },
-      {
-        path: 'service_list2',
-        component: () => import('@/views/service_model/cate_list'),
-        name: 'service_model2',
-        meta: { title: '领取配置', noCache: true }
-      },
-      {
-        path: 'service_list3',
-        component: () => import('@/views/service_model/little_tree'),
-        name: 'service_model3',
-        meta: { title: '小树配置', noCache: true }
+        meta: { title: '服务管理', noCache: true }
       }
     ]
   },
   {
-    path: '/finacial',
+    path: '/services',
     component: Layout,
-    redirect: '/finacial',
-    name: 'finacial',
-    meta: { title: '财务管理', icon: 'chart', noCache: true },
+    redirect: '/services',
+    name: 'services',
+    meta: { title: '订单管理', icon: 'guide', noCache: true },
     children: [
       {
-        path: 'finacial',
-        component: () => import('@/views/finacial/finacial'),
-        name: 'finacial',
-        meta: { title: '订单列表', noCache: true }
-      },
+        path: 'rechargeList',
+        component: () => import('@/views/recharge/rechargeList'),
+        name: 'rechargeList',
+        meta: { title: '订单管理', noCache: true }
+      }
+    ]
+  },
+  {
+    path: '/services_model8',
+    component: Layout,
+    redirect: '/services_model8',
+    name: 'services_model8',
+    meta: { title: '会员卡管理', icon: 'peoples', noCache: true },
+    children: [
       {
-        path: 'finacial_list',
-        component: () => import('@/views/finacial/finacial_list'),
-        name: 'finacial_list',
-        meta: { title: '提现列表', noCache: true }
+        path: 'service_list',
+        component: () => import('@/views/service_model/service_list2'),
+        name: 'service_model',
+        meta: { title: '会员卡管理', noCache: true }
       }
     ]
   },
@@ -574,6 +505,13 @@ export const asyncRoutes = [
     },
     children: [
       {
+        path: 'msg',
+        component: () => import('@/views/msg/msg'),
+        name: 'config',
+        hidden:true,
+        meta: { title: '用户反馈', icon: 'tree' }
+      },
+      {
         path: 'config',
         component: () => import('@/views/config/config'),
         name: 'config',
@@ -583,7 +521,7 @@ export const asyncRoutes = [
         path: 'sysinfo',
         component: () => import('@/views/config/sysinfo'),
         name: 'sysinfo',
-        meta: { title: '性能监控', icon: 'tree' }
+        meta: { title: '性能监控', icon: 'nested' }
       },
     ]
   },

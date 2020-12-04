@@ -7,17 +7,15 @@
       :on-success="handleImageSuccess"
       class="image-uploader"
       drag
-      action="https://yilixiangsi.magicxhx.com/admin/uploads/ads_img_uploads"
+      action="https://api.piduopi.com/imgUploads"
     >
       <i class="el-icon-upload" />
       <div class="el-upload__text">
-        <em>点击上传商品缩略图</em>
+        <em>点击上传缩略图</em>
       </div>
     </el-upload>
     <div class="image-preview" v-for="(item,index) in getList" :key="index">
       <div class="image-preview-wrapper">
-        <div style="z-index: 999;text-align: center;" v-if="index==0?true:false">主图</div>
-        <div style="z-index: 999;text-align: center;" v-if="index==0?false:true">副图</div>
         <img :src="item">
         <div class="image-preview-action">
           <i class="el-icon-delete" @click="rmImage(index)" />
@@ -68,7 +66,7 @@ export default {
       this.$emit('input', b)
     },
     handleImageSuccess(response, file, filelist) {
-      this.emitInput(response.photo)
+      this.emitInput(response.qrcode)
     },
     beforeUpload() {
       const _self = this

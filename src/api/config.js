@@ -24,7 +24,7 @@ export function getMsmConfig() {
 
 export function saveConfigSms(data) {
   return request({
-    url: 'admin/admin/saveConfigSms',
+    url: 'saveConfigSms',
     method: 'post',
     data
   })
@@ -39,7 +39,7 @@ export function getMchConfig() {
 
 export function saveConfigMch(data) {
   return request({
-    url: 'admin/admin/saveConfigMch',
+    url: 'saveConfigMch',
     method: 'post',
     data
   })

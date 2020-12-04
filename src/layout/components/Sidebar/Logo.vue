@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: 'GO-VUE-ADMIN',
+      title: 'PP WASH',
       logo: "34567890"
     }
   }
@@ -55,14 +55,15 @@ export default {
     width: 100%;
 
     & .sidebar-logo {
-      width: 32px;
-      height: 32px;
+      width: 42px;
+      height: 42px;
       vertical-align: middle;
       margin-right: 15px;
     }
 
     & .sidebar-title {
       display: inline-block;
+      width: 60%;
       margin: 0;
       color: rgb(191, 203, 217);
       font-weight: 600;
@@ -70,6 +71,7 @@ export default {
       font-size: 14px;
       font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
       vertical-align: middle;
+      text-align: left;
     }
   }
 

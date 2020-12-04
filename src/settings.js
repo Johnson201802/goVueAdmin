@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'C+科技',
+  title: '皮皮洗车',
 
   /**
    * @type {boolean} true | false

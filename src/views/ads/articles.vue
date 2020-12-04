@@ -22,26 +22,31 @@
     >
       <el-table-column label="ID" prop="article_id" align="center" min-width="60px">
         <template slot-scope="{row}">
-          <span>{{ row.article_id }}</span>
+          <span>{{ row.Article_id }}</span>
         </template>
       </el-table-column>
       <el-table-column label="文章标题" min-width="100px">
         <template slot-scope="{row}">
-          <span  style="display:block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{ row.title }}</span>
+          <span  style="display:block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{ row.Title }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="浏览量" max-width="60px" align="center">
+        <template slot-scope="{row}">
+          <span >{{ row.Pv}}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" max-width="60px" align="center">
         <template slot-scope="{row}">
-          <span >{{ row.create_time  | parseTime('{y}-{m}-{d}')}}</span>
+          <span >{{ row.Create_time  | parseTime('{y}-{m}-{d}')}}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row.article_id)">
+          <el-button type="primary" size="mini" @click="handleUpdate(row.Article_id)">
             编辑
           </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index,row.article_id)">
+          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index,row.Article_id)">
             删除
           </el-button>
         </template>
@@ -137,7 +142,7 @@ export default {
         page: 1,
         limit: 10,
         title: undefined,
-        cate_id:undefined
+        sort:"+id"
       },
       importanceOptions: [{'key':1,'name':'是'},{'key':0,'name':'否'}],
       calendarTypeOptions,
@@ -172,12 +177,12 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchArticleList(this.listQuery).then(response => {
+      fetchArticleList(this.listQuery.page,this.listQuery.limit,this.listQuery.sort,this.listQuery.title).then(response => {
         if(response.code == 9000){
           this.$router.push({ name: 'Page401'})
         }else{
-          this.list = response.data.items
-          this.total = response.data.total
+          this.list = response.data
+          this.total = response.total
         }
 
         // Just to simulate the time of the request

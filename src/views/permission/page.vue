@@ -24,23 +24,23 @@
     >
       <el-table-column label="ID" prop="id" sortable="order" align="center" width="150px" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
+          <span>{{ row.Id }}</span>
         </template>
       </el-table-column>
       <el-table-column label="规则名称" width="200px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.title }}</span>
+          <span>{{ row.Title }}</span>
         </template>
       </el-table-column>
       <el-table-column label="模块 / 控制器 / 方法" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.Name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" class-name="status-col" width="150px">
         <template slot-scope="{row}">
-          <el-tag :type="row.status_t | statusFilter">
-            {{ row.status_t===1?'启用':'未启用' }}
+          <el-tag :type="row.Status_t | statusFilter">
+            {{ row.Status_t===1?'启用':'未启用' }}
           </el-tag>
         </template>
       </el-table-column>
@@ -49,7 +49,7 @@
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button v-if="row.status_t!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index,row.id)">
+          <el-button v-if="row.status_t!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index,row.Id)">
             删除
           </el-button>
         </template>
@@ -61,18 +61,18 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 400px; margin-left:50px;">
         <el-form-item label="上级规则" prop="pid">
-          <el-select v-model="temp.pid" class="filter-item" placeholder="请选择上级项">
+          <el-select v-model="temp.Pid" class="filter-item" placeholder="请选择上级项">
             <el-option v-for="(item,index) in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
           </el-select>
         </el-form-item>
         <el-form-item label="规则名称" prop="title">
-          <el-input v-model="temp.title" />
+          <el-input v-model="temp.Title" />
         </el-form-item>
         <el-form-item label="规则" prop="name">
-          <el-input v-model="temp.name" />
+          <el-input v-model="temp.Name" />
         </el-form-item>
         <el-form-item label="状态" prop="status_t">
-          <el-select v-model="temp.status_t" class="filter-item" placeholder="请设置状态">
+          <el-select v-model="temp.Status_t" class="filter-item" placeholder="请设置状态">
             <el-option v-for="(item,i) in statusOptions" :key="item.key" :label="item.name" :value="item.key" />
           </el-select>
         </el-form-item>
@@ -146,12 +146,12 @@ export default {
       statusOptions: [{ 'key': 1, 'name': '启用' }, { 'key': 0, 'name': '不启用' }],
       showReviewer: false,
       temp: {
-        id: undefined,
-        pid: '',
-        name: '',
-        title: '',
-        type: '',
-        status_t: ''
+        Id: undefined,
+        Pid: '',
+        Name: '',
+        Title: '',
+        Type: '1',
+        Status_t: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -162,10 +162,10 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        pid: [{ required: true, message: '请选择上级规则', trigger: 'change' }],
-        status_t: [{ required: true, message: '请选择状态', trigger: 'change' }],
-        name: [{ required: true, message: '规则不能为空', trigger: 'blur' }],
-        title: [{ required: true, message: '规则名称不能为空', trigger: 'blur' }]
+        Pid: [{ required: true, message: '请选择上级规则', trigger: 'change' }],
+        Status_t: [{ required: true, message: '请选择状态', trigger: 'change' }],
+        Name: [{ required: true, message: '规则不能为空', trigger: 'blur' }],
+        Title: [{ required: true, message: '规则名称不能为空', trigger: 'blur' }]
       },
       downloadLoading: false
     }
@@ -181,8 +181,8 @@ export default {
         if (response.code == 9000) {
           this.$router.push({ name: 'Page401' })
         } else {
-          this.list = response.data.items
-          this.total = response.data.total
+          this.list = response.data
+          this.total = response.total
         }
 
         // Just to simulate the time of the request
@@ -218,12 +218,12 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        id: undefined,
-        pid: '',
-        name: '',
-        title: '',
-        type: '1',
-        status_t: ''
+        Id: undefined,
+        Pid: '',
+        Name: '',
+        Title: '',
+        Type: '1',
+        Status_t: ''
       }
     },
     handleCreate() {
@@ -245,9 +245,7 @@ export default {
             const id = response.id
 
             if (code == 200) {
-              this.temp.id = id
-              this.temp.status_t = 1
-              this.list.unshift(this.temp)
+              this.getList()
               this.dialogFormVisible = false
               this.$notify({
                 title: '通知',
@@ -275,6 +273,7 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
+      console.log(this.temp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -356,7 +355,7 @@ export default {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['id', 'title', 'name', 'status_t']
-        const filterVal = ['id', 'title', 'name', 'status_t']
+        const filterVal = ['Id', 'Title', 'Name', 'Status_t']
         const data = this.formatJson(filterVal)
         excel.export_json_to_excel({
           header: tHeader,

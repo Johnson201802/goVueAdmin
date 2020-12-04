@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: 'admin/admin/getAuthList', // vue-element-admin/article/list
+    url: 'getAuthList', // vue-element-admin/article/list
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function fetchList(query) {
 
 export function delRule(id) {
   return request({
-    url: 'admin/admin/delRule',
+    url: 'delRule',
     method: 'delete',
     params: { id }
   })
@@ -18,7 +18,7 @@ export function delRule(id) {
 
 export function createRule(data) {
   return request({
-    url: 'admin/admin/createRule',
+    url: 'createRule',
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function createRule(data) {
 
 export function updateRule(data) {
   return request({
-    url: 'admin/admin/updateRule',
+    url: 'updateRule',
     method: 'post',
     data
   })

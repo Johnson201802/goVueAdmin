@@ -1,16 +1,16 @@
 import request from '@/utils/request'
 
-export function fetchArticleList(query) {
+export function fetchArticleList(page,limit,sort,title) {
   return request({
-    url: 'admin/admin/fetchArticleList',
+    url: '/fetchArticleList',
     method: 'get',
-    params: query
+    params: {page:page,limit:limit,title:title}
   })
 }
 
 export function createArticle(data) {
   return request({
-    url: 'admin/admin/createArticle',
+    url: '/createArticle',
     method: 'post',
     data
   })
@@ -18,7 +18,7 @@ export function createArticle(data) {
 
 export function fetchOneArticle(id) {
   return request({
-    url: 'admin/admin/fetchOneArticle',
+    url: '/fetchOneArticle',
     method: 'get',
     params:{'id':id}
   })
@@ -26,7 +26,7 @@ export function fetchOneArticle(id) {
 
 export function updateArticle(data) {
   return request({
-    url: 'admin/admin/updateArticle',
+    url: '/updateArticle',
     method: 'post',
     data
   })
@@ -34,8 +34,8 @@ export function updateArticle(data) {
 
 export function delArticle(id) {
   return request({
-    url: 'admin/admin/delArticle',
-    method: 'POST',
+    url: '/delArticle',
+    method: 'DELETE',
     params:{'id':id}
   })
 }

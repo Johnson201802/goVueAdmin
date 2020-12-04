@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
+<!--    <div class="filter-container">
       <el-input v-model="listQuery.title" placeholder=" 微信昵称 " style="width: 300px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索 / Search
       </el-button>
-    </div>
+    </div> -->
 
     <el-table
       :key="tableKey"
@@ -19,35 +19,34 @@
     >
       <el-table-column label="ID" prop="Id" align="center" min-width="60px">
         <template slot-scope="{row}">
-          <span>{{ row.Id }}</span>
+          <span>{{ row.Order_id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="微信昵称" min-width="80px" align="center">
+      <el-table-column label="商户名称" min-width="80px" align="center">
         <template slot-scope="{row}">
-          <span style="display:block;text-overflow:ellipsis;white-space:wrap;overflow:hidden;">{{ row.nick_name }}</span>
+          <span style="display:block;text-overflow:ellipsis;white-space:wrap;overflow:hidden;">{{ row.Name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="头像" min-width="80px" align="center">
+      <el-table-column label="用户名称" min-width="80px" align="center">
         <template slot-scope="{row}">
-          <a v-if="row.avatar!=''?true:false" :href="row.avatar" target="_blank"><img :src="row.avatar" class="user"></a>
-          <span v-if="row.avatar==''?true:false">没有图片</span>
+          <span style="display:block;text-overflow:ellipsis;white-space:wrap;overflow:hidden;">{{ row.Nick_name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="购买数量(1元=1红豆)" min-width="80px" align="center">
+      <el-table-column label="价格" min-width="80px" align="center">
         <template slot-scope="{row}">
-          <span style="">{{ row.amount }}</span>
+          <span >{{ row.Price }}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" min-width="80px" align="center">
         <template slot-scope="{row}">
-          <el-tag v-if="row.status == 1" type="success">已付款</el-tag>
-          <el-tag v-if="row.status == 0" type="info">未支付</el-tag>
-          <el-tag v-if="row.status == 2" type="danger">已退款</el-tag>
+          <el-tag v-if="row.Status == 1" type="success">已付款</el-tag>
+          <el-tag v-if="row.Status == 0" type="info">未支付</el-tag>
+          <el-tag v-if="row.Status == 2" type="danger">已退款</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" min-width="80px" align="center">
+      <el-table-column label="星级" min-width="80px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.time  | parseTime('{y}-{m}-{d}')}}</span>
+          <span>{{ row.Stars }}</span>
         </template>
       </el-table-column>
 

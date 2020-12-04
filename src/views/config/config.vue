@@ -9,7 +9,7 @@
               <span style="color: #909399;">小程序推广二维码&emsp;&emsp;</span>
               <el-upload
                 list-type="none"
-                action="http://internal.congmingpay.com/internal/uploadmerchantimg.do"
+                action="https://api.piduopi.com/imgUploads"
                 accept="image/jpeg,image/jpg,image/gif,image/png"
                 :limit="1"
                 :on-error="uploadError"

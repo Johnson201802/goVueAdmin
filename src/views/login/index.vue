@@ -69,7 +69,7 @@
 
       <div style="position:relative">
         <div class="tips" style="text-align:center">
-          <span style="margin-right:18px;">@Copyright 2020 C+科技 - 技术支持</span>
+          <span style="margin-right:18px;">@Copyright 2020 皮多皮</span>
           <!-- <span></span> -->
         </div>
 
@@ -179,7 +179,7 @@ export default {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              this.$router.push({ path: '/user', query: this.otherQuery })
               this.loading = false
             }).catch(() => {
               this.loading = false

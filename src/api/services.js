@@ -1,24 +1,39 @@
 import request from '@/utils/request'
 
-export function fetchPresentConfigList(query) {
+export function fetchServicesList(query) {
   return request({
-    url: 'admin/admin/fetchPresentConfigList',
+    url: '/fetchServicesList',
     method: 'get',
     params: query
   })
 }
 
-export function createPresentConfigList(query) {
+export function changeStatus(id,is_sale) {
   return request({
-    url: 'admin/admin/createPresentConfigList',
-    method: 'post',
-    params: query
+    url: '/changeStatus',
+    method: 'POST',
+    params: {"id":id,"is_sale":is_sale}
   })
 }
 
-export function updatePresentConfigList(data) {
+export function createService(data) {
   return request({
-    url: 'admin/admin/updatePresentConfigList',
+    url: '/createService',
+    method: 'post',
+    data
+  })
+}
+
+export function getMerchant() {
+  return request({
+    url: '/getMerchant',
+    method: 'GET'
+  })
+}
+
+export function updateService(data) {
+  return request({
+    url: '/updateService',
     method: 'post',
     data
   })
@@ -56,17 +71,10 @@ export function sort(data) {
   })
 }
 
-export function changeStatus(id, status) {
-  return request({
-    url: `admin/admin/changeStatus`,
-    method: 'post',
-    params: { id: id, status: status }
-  })
-}
 
-export function getCateList() {
+export function getCardList() {
   return request({
-    url: `admin/admin/getCateList`,
+    url: `getCardList`,
     method: 'get'
   })
 }
@@ -100,5 +108,21 @@ export function sortGiftConfig(id, sort) {
     url: `admin/admin/sortGiftConfig`,
     method: 'GET',
     params: { id: id, sort: sort }
+  })
+}
+
+export function updateCard(data) {
+  return request({
+    url: `/updateCard`,
+    method: 'POST',
+    data
+  })
+}
+
+export function changeStatus2(id,status) {
+  return request({
+    url: `/changeStatus2`,
+    method: 'GET',
+    params:{id : id, status : status}
   })
 }

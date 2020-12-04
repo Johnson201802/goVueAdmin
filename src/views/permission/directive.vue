@@ -21,38 +21,38 @@
     >
       <el-table-column label="ID" prop="id" sortable="order" align="center" width="150px" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
+          <span>{{ row.Id }}</span>
         </template>
       </el-table-column>
       <el-table-column label="账号" width="200px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.admin_name }}</span>
+          <span>{{ row.Admin_name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="头像" max-width="150px" align="center">
         <template slot-scope="{row}">
-          <a :href="row.avatar" target="_blank"><img :src="row.avatar" class="user-avatar"></a>
+          <a :href="row.Avatar" target="_blank"><img :src="row.Avatar" class="user-avatar"></a>
         </template>
       </el-table-column>
       <el-table-column label="角色" min-width="150px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.title=='undefined'?'刷新获取':row.title }}</span>
+          <span>{{ row.Title=='undefined'?'刷新获取':row.Title }}</span>
         </template>
       </el-table-column>
       <el-table-column label="最近登陆IP" min-width="150px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.admin_login_ip }}</span>
+          <span>{{ row.Admin_login_ip }}</span>
         </template>
       </el-table-column>
       <el-table-column label="最近登陆时间" min-width="150px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.login_time | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+          <span>{{ row.Login_time | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" class-name="status-col" width="150px">
         <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
-            {{ row.status===1?'启用':'未启用' }}
+          <el-tag :type="row.Status | statusFilter">
+            {{ row.Status===1?'启用':'未启用' }}
           </el-tag>
         </template>
       </el-table-column>
@@ -61,7 +61,7 @@
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index,row.id)">
+          <el-button v-if="row.Status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index,row.Id)">
             删除
           </el-button>
         </template>
@@ -73,23 +73,23 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 400px; margin-left:50px;">
         <el-form-item label="所属用户组" prop="group_id">
-          <el-select v-model="temp.group_id" class="filter-item" placeholder="请选择所属用户组">
-            <el-option v-for="(item,index) in group" :key="item.id" :label="item.title" :value="item.id" />
+          <el-select v-model="temp.Group_id" class="filter-item" placeholder="请选择所属用户组">
+            <el-option v-for="(item,index) in group" :key="item.Id" :label="item.Title" :value="item.Id" />
           </el-select>
         </el-form-item>
         <el-form-item label="管理员账号" prop="admin_name">
-          <el-input v-model="temp.admin_name" />
+          <el-input v-model="temp.Admin_name" />
         </el-form-item>
         <el-form-item label="管理员密码" prop="pwd_t">
-          <el-input v-model="temp.pwd_t" />
+          <el-input v-model="temp.Admin_pwd" />
         </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-select v-model="temp.status" class="filter-item" placeholder="请设置状态">
+          <el-select v-model="temp.Status" class="filter-item" placeholder="请设置状态">
             <el-option v-for="(item,i) in statusOptions" :key="item.key" :label="item.name" :value="item.key" />
           </el-select>
         </el-form-item>
         <el-form-item label="账户备注" prop="introduction">
-          <el-input v-model="temp.introduction" />
+          <el-input v-model="temp.Introduction" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -152,13 +152,13 @@ export default {
       statusOptions: [{ 'key': 1, 'name': '启用' }, { 'key': 0, 'name': '不启用' }],
       showReviewer: false,
       temp: {
-        id: undefined,
-        group_id: '',
-        admin_name: '',
-        admin_pwd: '',
-        pwd_t: '',
-        introduction: '',
-        status: ''
+        Id: undefined,
+        Group_id: '',
+        Admin_name: '',
+        Admin_pwd: '',
+        Pwd_t: '',
+        Introduction: '',
+        Status: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -169,10 +169,10 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        group_id: [{ required: true, message: '请选择所属用户组', trigger: 'change' }],
-        status: [{ required: true, message: '请选择状态', trigger: 'change' }],
-        admin_name: [{ required: true, message: '管理员账号不能为空', trigger: 'blur' }],
-        title: [{ required: true, message: '规则名称不能为空', trigger: 'blur' }]
+        Group_id: [{ required: true, message: '请选择所属用户组', trigger: 'change' }],
+        Status: [{ required: true, message: '请选择状态', trigger: 'change' }],
+        Admin_name: [{ required: true, message: '管理员账号不能为空', trigger: 'blur' }],
+        Title: [{ required: true, message: '规则名称不能为空', trigger: 'blur' }]
       },
       downloadLoading: false
     }
@@ -188,8 +188,8 @@ export default {
         if (response.code == 9000) {
           this.$router.push({ name: 'Page401' })
         } else {
-          this.list = response.data.items
-          this.total = response.data.total
+          this.list = response.data
+          this.total = response.total
         }
 
         // Just to simulate the time of the request
@@ -237,13 +237,13 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        id: undefined,
-        group_id: '',
-        avatar: 'http://pic1.win4000.com/tj/2017-12-07/5a28ba185fe96.jpg',
-        admin_name: '',
-        pwd_t: '',
-        introduction: '',
-        status: ''
+        Id: undefined,
+        Group_id: '',
+        Avatar: 'http://pic1.win4000.com/tj/2017-12-07/5a28ba185fe96.jpg',
+        Admin_name: '',
+        Admin_pwd: '',
+        Introduction: '',
+        Status: ''
       }
     },
     handleCreate() {

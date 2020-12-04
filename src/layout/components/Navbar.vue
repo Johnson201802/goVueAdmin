@@ -14,6 +14,13 @@
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
 
+        <el-tooltip content="消息" effect="dark" placement="bottom">
+          <div class="right-menu-item hover-effect" @click="goMsg">
+            <div><svg-icon icon-class="message" /></div>
+            <div v-if="is_new_msg" style="width: 10px;height: 10px;background-color: orangered;position: absolute;top: 10px;right: 90px;border-radius: 100px;"></div>
+          </div>
+        </el-tooltip>
+
       </template>
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
@@ -34,7 +41,7 @@
           <!-- <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
             <el-dropdown-item>Docs</el-dropdown-item>
           </a> -->
-          <el-dropdown-item divided @click.native="logout">
+          <el-dropdown-item @click.native="logout">
             <span style="display:block;">退出</span>
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -51,9 +58,14 @@ import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 // import Search from '@/components/HeaderSearch'
-import { delCache } from '@/api/common'
+import { delCache , getNewMsg } from '@/api/common'
 
 export default {
+  data() {
+  	return {
+  		is_new_msg:false,
+  	}
+  },
   components: {
     Breadcrumb,
     Hamburger,
@@ -69,9 +81,22 @@ export default {
       'device'
     ])
   },
+  mounted() {
+    console.log(56789)
+  	this.getNewMsg2()
+  },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
+    },
+    getNewMsg2(){
+      getNewMsg().then(response => {
+        const code = response.code
+        const msg = response.msg
+        if (code == 200) {
+          this.is_new_msg = true
+        }
+      })
     },
     clear_cache() {
       this.$confirm('您确定要清空缓存?', '提示', {
@@ -108,8 +133,11 @@ export default {
     closepet() {
       window.location.reload()
     },
+    goMsg(){
+      this.$router.push(`/config/msg`)
+    },
     async logout() {
-      await this.$store.dispatch('user/logout')
+      await this.$store.dispatch('config/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }
