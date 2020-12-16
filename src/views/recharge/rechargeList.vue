@@ -50,7 +50,7 @@
       <el-table-column label="状态" min-width="80px" align="center">
         <template slot-scope="{row}">
           <el-tag v-if="row.Status == 1" type="success">已付款</el-tag>
-          <el-tag v-if="row.Status == 0" type="info">未支付</el-tag>
+          <el-tag v-if="row.Status == 0" type="warning">VIP支付</el-tag>
           <el-tag v-if="row.Status == 2" type="danger">已退款</el-tag>
         </template>
       </el-table-column>
@@ -192,7 +192,6 @@ export default {
         if(response.code == 9000){
           this.$router.push({ name: 'Page401'})
         }else{
-          console.log(response.data)
           this.list = response.data
           this.total = response.total
           this.is_excel = true

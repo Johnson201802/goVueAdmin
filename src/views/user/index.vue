@@ -27,7 +27,7 @@
       </el-table-column>
       <el-table-column label="微信昵称" min-width="60px" align="center">
         <template slot-scope="{row}">
-          <span class="" @click="handleUpdate(row)">{{ row.Nick_name }}</span>
+          <span class="">{{ row.Nick_name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="头像" min-width="60px" align="center">
@@ -47,7 +47,8 @@
       </el-table-column>
       <el-table-column label="是否VIP" align="center" min-width="150px">
         <template slot-scope="{row}">
-          <span>{{row.Is_vip==""?"否":"是"}}</span>
+          <el-tag v-if="row.Is_vip != ''" type="warning">尊贵VIP</el-tag>
+          <el-tag v-if="row.Is_vip == ''" type="info">非VIP</el-tag>
         </template>
       </el-table-column>
 <!--      <el-table-column label="注册时间" max-width="100px" align="center">
@@ -138,13 +139,11 @@ export default {
       let that = this
       that.listLoading = true
       fetchList(that.listQuery).then(response => {
-        console.log(response)
         if(response.code == 9000){
           that.$router.push({ name: 'Page401'})
         }else{
           that.list = response.data
           that.total = response.total
-          console.log(response)
         }
         // Just to simulate the time of the request
         setTimeout(() => {

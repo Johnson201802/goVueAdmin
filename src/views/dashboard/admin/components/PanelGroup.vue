@@ -3,13 +3,13 @@
     <el-col :xs="12" :sm="12" :md="12" :lg="6" class="card-panel-col">
       <div class="card-panel1">
         <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon icon-class="peoples" class-name="card-panel-icon" />
+          <svg-icon icon-class="wechat" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
             总用户数
           </div>
-          <count-to :start-val="0" :end-val="1000" :duration="2600" class="card-panel-num" style="margin-top: 5px;" />
+          <count-to :start-val="0" :end-val="data.count" :duration="2600" class="card-panel-num" style="margin-top: 5px;" />
           <p>计量单位：人</p>
         </div>
       </div>
@@ -23,7 +23,7 @@
           <div class="card-panel-text">
             今日活跃
           </div>
-          <count-to :start-val="0" :end-val="100" :duration="3060" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="data.active_count" :duration="3060" class="card-panel-num" />
           <p>计量单位：人</p>
         </div>
       </div>
@@ -31,13 +31,13 @@
     <el-col :xs="12" :sm="12" :md="12" :lg="6" class="card-panel-col">
       <div class="card-panel3">
         <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="wechat" class-name="card-panel-icon" />
+          <svg-icon icon-class="peoples" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            推广员总数
+            VIP总数
           </div>
-          <count-to :start-val="0" :end-val="1000" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="data.member_count" :duration="3200" class="card-panel-num" />
           <p>计量单位：人</p>
         </div>
       </div>
@@ -51,7 +51,7 @@
           <div class="card-panel-text">
             商家总数
           </div>
-          <count-to :start-val="0" :end-val="200" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="data.merchant_count" :duration="3600" class="card-panel-num" />
           <p>计量单位：人</p>
         </div>
       </div>
@@ -61,7 +61,7 @@
 
 <script>
 import CountTo from 'vue-count-to'
-// import { cardData } from '@/api/common'
+import { cardData } from '@/api/common'
 
 export default {
   components: {
@@ -69,13 +69,18 @@ export default {
   },
   data() {
     return {
-      data: null
+      data: {
+        "count":0,
+        "member_count":0,
+        "merchant_count":0,
+        "active_count":0,
+      }
     }
   },
   created() {
-    // cardData().then((response) => {
-    //   this.data = response.data
-    // })
+    cardData().then((response) => {
+      this.data = response
+    })
   },
   methods: {
     handleSetLineChartData(type) {

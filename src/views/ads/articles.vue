@@ -32,7 +32,7 @@
       </el-table-column>
       <el-table-column label="浏览量" max-width="60px" align="center">
         <template slot-scope="{row}">
-          <span >{{ row.Pv}}</span>
+          <span >{{ row.Pv==0?"暂未统计":row.Pv}}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" max-width="60px" align="center">

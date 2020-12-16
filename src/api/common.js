@@ -23,7 +23,7 @@ export function loginLog() {
 
 export function cardData() {
   return request({
-    url: 'admin/admin/cardData', // vue-element-admin/article/list
+    url: '/getAllInfo', // vue-element-admin/article/list
     method: 'get'
   })
 }

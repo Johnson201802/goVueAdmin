@@ -82,7 +82,6 @@ export default {
     ])
   },
   mounted() {
-    console.log(56789)
   	this.getNewMsg2()
   },
   methods: {
@@ -137,7 +136,7 @@ export default {
       this.$router.push(`/config/msg`)
     },
     async logout() {
-      await this.$store.dispatch('config/logout')
+      await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }

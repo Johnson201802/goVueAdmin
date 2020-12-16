@@ -27,7 +27,7 @@
       </el-table-column>
       <el-table-column label="商户名称" min-width="100px">
         <template slot-scope="{row}">
-          <span  @click="handleUpdate(row)" style="display:block;text-overflow:ellipsis;white-space:wrap;overflow:hidden;">{{ row.Name }}</span>
+          <span   style="display:block;text-overflow:ellipsis;white-space:wrap;overflow:hidden;">{{ row.Name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="商户门头" min-width="50px" align="center">
@@ -59,7 +59,7 @@
       </el-table-column>
       <el-table-column label="创建时间" min-width="60px" align="center">
         <template slot-scope="{row}">
-          <span @click="handleUpdate(row)">{{ row.Create_time  | parseTime('{y}-{m}-{d}')}}</span>
+          <span >{{ row.Create_time  | parseTime('{y}-{m}-{d}')}}</span>
         </template>
       </el-table-column>
       <el-table-column label="是否上架" min-width="50px" align="center">
@@ -69,8 +69,8 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="200px" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <a @click="goService(row.Merchant_id)" style="margin: 10px 10px;text-decoration: underline;">服务</a>
-          <a @click="handleUpdate(row.Merchant_id)" style="margin: 10px 10px;text-decoration: underline;">编辑</a>
+          <a @click="goService(row.Merchant_id)" style="margin: 10px 10px;text-decoration: underline;color:#2196F3">服务</a>
+          <a @click="handleUpdate(row.Merchant_id)" style="margin: 10px 10px;text-decoration: underline;color:#2196F3">编辑</a>
           <a @click="handleDelete(row,$index,row.Merchant_id)" style="margin: 10px 10px;color: #FF0000;text-decoration: underline;">删除</a>
         </template>
       </el-table-column>
