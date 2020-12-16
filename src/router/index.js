@@ -70,19 +70,19 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/401'),
     hidden: true
   },
-  // {
-  //   path: '/',
-  //   component: Layout,
-  //   redirect: '/dashboard',
-  //   children: [
-  //     {
-  //       path: 'dashboard',
-  //       component: () => import('@/views/dashboard/index'),
-  //       name: 'dashboard',
-  //       meta: { title: '主页', icon: 'dashboard', affix: true }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/dashboard',
+    children: [
+      {
+        path: 'dashboard',
+        component: () => import('@/views/dashboard/index'),
+        name: 'dashboard',
+        meta: { title: '主页', icon: 'dashboard', affix: true, noCache: true }
+      }
+    ]
+  },
   {
     path: '/user',
     component: Layout,
@@ -97,7 +97,7 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/user/index'),
         name: 'user_list',
-        meta: { title: '用户列表' , affix: true}
+        meta: { title: '用户列表'}
       }
     ]
   },
@@ -169,7 +169,8 @@ export const constantRoutes = [
     path: '/services_model2',
     component: Layout,
     redirect: '/services_model2',
-    name: 'services_model2',
+    name: 'services_model22',
+    hidden: true,
     meta: { title: '服务管理', icon: 'list', noCache: true },
     children: [
       {

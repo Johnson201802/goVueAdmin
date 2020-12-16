@@ -39,9 +39,9 @@ export function updateService(data) {
   })
 }
 
-export function delPresentConfig(id) {
+export function delPresent(id) {
   return request({
-    url: `admin/admin/delPresentConfig`,
+    url: `/delPresent`,
     method: 'delete',
     params: { id: id }
   })

@@ -37,24 +37,24 @@
       </el-table-column>
       <el-table-column label="手机" min-width="80px" align="center">
         <template slot-scope="{row}">
-          <span class="" @click="handleUpdate(row)">{{ row.Phone }}</span>
+          <span>{{ row.Phone=='0'?"未授权获取":row.Phone }}</span>
         </template>
       </el-table-column>
       <el-table-column label="是否商户" align="center" min-width="150px">
         <template slot-scope="{row}">
-          <span class="" @click="handleUpdate(row)">{{row.Merchant_id==""?"否":"是"}}</span>
+          <span>{{row.Merchant_id==""?"否":"是"}}</span>
         </template>
       </el-table-column>
       <el-table-column label="是否VIP" align="center" min-width="150px">
         <template slot-scope="{row}">
-          <span class="" @click="handleUpdate(row)">{{row.Is_vip=="0"?"否":"是"}}</span>
+          <span>{{row.Is_vip==""?"否":"是"}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="注册时间" max-width="100px" align="center">
+<!--      <el-table-column label="注册时间" max-width="100px" align="center">
         <template slot-scope="{row}">
           {{row.Expire_vip_time  | parseTime('{y}-{m}-{d}')}}
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column label="操作" align="center" width="80px" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">

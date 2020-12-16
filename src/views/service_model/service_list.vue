@@ -57,7 +57,7 @@
           <el-button type="success" size="mini" @click="handleUpdate(row)">
             修改
           </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index,row.Id)">
+          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index,row.Service_id)">
             删除
           </el-button>
         </template>
@@ -68,11 +68,6 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="150px" style="width: 600px; margin-left:50px;">
-        <el-form-item label="商户选择" prop="present_name">
-          <el-select v-model="temp.Pid" class="filter-item" placeholder="请选择所属商户">
-            <el-option v-for="(item,index) in merchant" :key="item.Merchant_id" :label="item.Name" :value="item.Merchant_id" />
-          </el-select>
-        </el-form-item>
         <el-form-item label="服务名称" prop="present_name">
           <el-input v-model="temp.Service_name" />
         </el-form-item>
@@ -179,7 +174,8 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        title: undefined
+        title: undefined,
+        id:0,
       },
       options: [{ label: '免费转', key: '1' }, { label: '面议', key: '2' }, { label: '一口价', key: '3' }],
       statusOptions: ['published', 'draft', 'deleted'],
@@ -189,7 +185,7 @@ export default {
         Origin_price:undefined,
         Now_price:undefined,
         Is_sale:"1",
-        Pid:"",
+        Pid:0,
         Icon:''
       },
       dialogFormVisible: false,
@@ -210,17 +206,19 @@ export default {
       downloadLoading: false
     }
   },
-  created() {
-    this.getList()
-    this.getMerchant()
-  },
   computed: {
     ...mapGetters([
       'name'
     ])
   },
+  created() {
+    const id = this.$route.params.id
+    this.getList(id)
+    this.listQuery.id = id
+    this.temp.Pid = id
+  },
   methods: {
-    getList() {
+    getList(id) {
       this.listLoading = true
       fetchServicesList(this.listQuery).then(response => {
         if(response.code == 9000){
@@ -229,15 +227,6 @@ export default {
           this.list = response.data
           this.total = response.total
         }
-        // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
-      })
-    },
-    getMerchant(){
-      getMerchant().then(response => {
-        this.merchant = response.data
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
@@ -363,7 +352,7 @@ export default {
         Origin_price:undefined,
         Now_price:undefined,
         Is_sale:"1",
-        Pid:"",
+        Pid:this.temp.Pid,
         Icon:''
       }
     },

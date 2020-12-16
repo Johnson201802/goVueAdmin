@@ -18,7 +18,7 @@ export function sortMerchant(id, sort) {
 
 export function changeMerchantStatus(id, status) {
   return request({
-    url: 'admin/admin/changeMerchantStatus',
+    url: '/changeMerchantStatus',
     method: 'post',
     params: { id: id, status: status }
   })

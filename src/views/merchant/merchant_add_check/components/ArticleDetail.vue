@@ -8,19 +8,31 @@
           </el-col>
         </el-row>
         <el-row style="margin-bottom: 40px;">
-          <el-col :span="24">
+          <el-col :span="5" style="padding-right: 20px;">
             <el-form-item style="margin-bottom: 40px;" prop="Merchant_name">
               <MDinput v-model="postForm.Name" :maxlength="100" name="Merchant_name" required>
                 商户名称（必填）
               </MDinput>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row style="margin-bottom: 40px;">
-          <el-col :span="24">
+          <el-col :span="5" style="padding-right: 20px;">
             <el-form-item style="margin-bottom: 40px;" prop="Merchant_name">
               <MDinput v-model="postForm.Mobile" :maxlength="100" name="Merchant_name" required>
                 商户手机（必填）
+              </MDinput>
+            </el-form-item>
+          </el-col>
+          <el-col :span="5" style="padding-right: 20px;">
+            <el-form-item style="margin-bottom: 40px;" prop="Merchant_name">
+              <MDinput v-model="postForm.Stars" :maxlength="100" name="Merchant_name" required>
+                星级（整数）
+              </MDinput>
+            </el-form-item>
+          </el-col>
+          <el-col :span="5" style="padding-right: 20px;">
+            <el-form-item style="margin-bottom: 40px;" prop="Merchant_name">
+              <MDinput v-model="postForm.Sales" :maxlength="100" name="Merchant_name" required>
+                销量（整数）
               </MDinput>
             </el-form-item>
           </el-col>
@@ -33,43 +45,56 @@
             <Upload v-model="postForm.Img2" :value="postForm.Img2"/>
           </el-col>
         </el-form-item>
-          <el-row style="padding:20px 20px;border-radius: 5px;border: 1px dashed #d9d9d9;margin-bottom: 40px;">
-            <el-col :span="8">
-              <el-form-item prop="Merchant_desc" style="margin-bottom: 40px;padding:20px 20px;border-radius: 5px;">
-                <MDinput v-model="postForm.Longitude" :maxlength="100" name="Merchant_name" required>
-                  经度（地图选择）
-                </MDinput>
+          <el-row style="padding:20px 20px;border-radius: 5px;margin-bottom: 40px;">
+            <el-col :span="12">
+              <el-form-item style="margin-bottom: 40px;" prop="Merchant_name">
+                <el-form-item prop="Merchant_desc" style="border-radius: 5px;">
+                  <iframe id="mapPage" width="100%" height="800px" frameborder=0 :src="getSrc"></iframe>
+                </el-form-item>
               </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="24">
+                <el-form-item prop="Merchant_desc" style="margin-bottom: 40px;padding:20px 20px;border-radius: 5px;">
+                  <el-tag>在左边地图组件选择好您想要选择的定位地址，若想精确，也可以在右边手动输入地址的经度纬度和位置名称！</el-tag>
+                </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-form-item prop="Merchant_desc" style="margin-bottom: 40px;padding:20px 20px;border-radius: 5px;">
+                  <MDinput v-model="postForm.Longitude" :maxlength="100" name="Merchant_name" required>
+                    经度（地图选择）
+                  </MDinput>
+                </el-form-item>
+              </el-row>
+              <el-row>
+                <el-col :span="24">
+                 <el-form-item prop="Merchant_desc" style="margin-bottom: 40px;padding:20px 20px;border-radius: 5px;">
+                   <MDinput v-model="postForm.Latitude" :maxlength="100" name="Merchant_name" required>
+                     纬度（地图选择）
+                   </MDinput>
+                 </el-form-item>
+                 </el-col>
+              </el-row>
+              <el-row >
+                <el-col :span="24">
+                <el-form-item prop="Merchant_desc" style="margin-bottom: 40px;padding:20px 20px;border-radius: 5px;">
+                  <MDinput v-model="postForm.Address" :maxlength="100" name="Merchant_name" required>
+                    地址（地图选择）
+                  </MDinput>
+                </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row style="padding: 10vh;">
+                <el-col :span="24" style="display: flex;justify-content: center;">
+                  <el-button :loading = "loading" type="primary" @click="isEdit?submitFormEdit():submitFormAdd()">确定 / Comfirm</el-button>
+                  <el-button @click="cancel" type="danger">重置 / Reset</el-button>
+                </el-col>
+              </el-row>
              </el-col>
-             <el-col :span="8">
-              <el-form-item prop="Merchant_desc" style="margin-bottom: 40px;padding:20px 20px;border-radius: 5px;">
-                <MDinput v-model="postForm.Latitude" :maxlength="100" name="Merchant_name" required>
-                  纬度（地图选择）
-                </MDinput>
-              </el-form-item>
-              </el-col>
-              <el-col :span="8">
-              <el-form-item prop="Merchant_desc" style="margin-bottom: 40px;padding:20px 20px;border-radius: 5px;">
-                <MDinput v-model="postForm.Address" :maxlength="100" name="Merchant_name" required>
-                  地址（地图选择）
-                </MDinput>
-              </el-form-item>
-              </el-col>
-          </el-row>
-          <el-row style="padding:20px 20px;border-radius: 5px;border: 1px dashed #d9d9d9;">
-            <el-form-item style="margin-bottom: 40px;" prop="Merchant_name">
-              <el-form-item prop="Merchant_desc" style="margin-bottom: 40px;padding:20px 20px;border-radius: 5px;">
-                <iframe id="mapPage" width="100%" height="800px" frameborder=0 :src="getSrc"></iframe>
-              </el-form-item>
-            </el-form-item>
           </el-row>
       </div>
-      <el-row style="padding: 10vh;">
-        <el-col :span="24" style="display: flex;justify-content: center;align-items: center;">
-          <el-button :loading = "loading" type="primary" @click="isEdit?submitFormEdit():submitFormAdd()">确定 / Comfirm</el-button>
-          <el-button type="info" @click="cancel">重置 / Reset</el-button>
-        </el-col>
-      </el-row>
     </el-form>
   </div>
 </template>
@@ -131,7 +156,9 @@ export default {
                   Img2: '', // 内部缩略图
                   Longitude: undefined, // 经度
                   Latitude: undefined, // 纬度
-                  Address: '' // 地址,
+                  Address: '', // 地址,
+                  Stars:'',
+                  Sales:''
                   },
       loading: false,
       userListOptions: [],
@@ -141,6 +168,8 @@ export default {
       rules: {
         Name: [{ required: true, message: '请填写商户名称', trigger: 'blur' }],
         Mobile: [{ required: true, message: '请填写商户手机', trigger: 'blur' }],
+        Stars: [{ required: true, message: '请填写星级', trigger: 'blur' }],
+        Sales: [{ required: true, message: '请填写销量', trigger: 'blur' }],
         Img1: [{ required: true, message: '请上传门头照', trigger: 'change' }],
         Img2: [{ required: true, message: '请上传内部照', trigger: 'blur' }],
         Longitude: [{ required: true, message: '请选择商户地址', trigger: 'blur' }],

@@ -1,11 +1,21 @@
 <template>
   <div class="app-container">
-<!--    <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder=" 微信昵称 " style="width: 300px;" class="filter-item" @keyup.enter.native="handleFilter" />
+   <div class="filter-container">
+      <el-select v-model="listQuery.pid" placeholder="商户选择" clearable style="width: 260px" class="filter-item">
+        <el-option v-for="(item,key) in importanceOptions" :key="key" :label="item.Name" :value="item.Merchant_id" />
+      </el-select>
+      <el-date-picker v-model="listQuery.timestamp" type="date" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择开始时间" class="filter-item"/>
+      <el-date-picker v-model="listQuery.timestamp2" type="date" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择结束时间" class="filter-item"/>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索 / Search
       </el-button>
-    </div> -->
+      <el-button v-if="is_excel" v-waves class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+        导出 / Excel
+      </el-button>
+      <el-button v-if="!is_excel" disabled v-waves class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+        导出 / Excel
+      </el-button>
+    </div>
 
     <el-table
       :key="tableKey"
@@ -17,11 +27,11 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="ID" prop="Id" align="center" min-width="60px">
+<!--      <el-table-column label="ID" prop="Id" align="center" min-width="60px">
         <template slot-scope="{row}">
-          <span>{{ row.Order_id }}</span>
+          <span>{{ row.Id }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="商户名称" min-width="80px" align="center">
         <template slot-scope="{row}">
           <span style="display:block;text-overflow:ellipsis;white-space:wrap;overflow:hidden;">{{ row.Name }}</span>
@@ -49,15 +59,20 @@
           <span>{{ row.Stars }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="下单时间" min-width="80px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.Time | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}</span>
+        </template>
+      </el-table-column>
 
       <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button v-if="row.status==1" size="mini" type="warning" @click="handleBack(row,$index,row.Id)">
+<!--          <el-button v-if="row.status==1" size="mini" type="warning" @click="handleBack(row,$index,row.Id)">
             退款
           </el-button>
-          <el-button v-if="row.status!=1" size="mini" type="" @click="cannot()">
+          <el-button v-if="row.status!=1" size="mini" type="" @click="cannot(row.Id)">
             退款
-          </el-button>
+          </el-button> -->
           <el-button  size="mini" type="danger" @click="handleDelete(row,$index,row.Id)">
             删除
           </el-button>
@@ -73,6 +88,7 @@
 import { Message } from 'element-ui'
 import ImageCropper from '@/components/ImageCropper'
 import { fetchOrderList, giveBack, delOrder } from '@/api/order'
+import { getMerchant } from '@/api/services'
 import { parseTime } from '@/utils'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -121,12 +137,16 @@ export default {
       listLoading: true,
       imagecropperShow: false,
       imagecropperKey: 0,
+      is_excel:false,
       listQuery: {
         page: 1,
         limit: 10,
-        title: undefined
+        title: undefined,
+        pid:undefined,
+        timestamp:undefined,
+        timestamp2:undefined
       },
-      importanceOptions: [{'key':1,'name':'是'},{'key':0,'name':'否'}],
+      importanceOptions: [],
       calendarTypeOptions,
       sortOptions: [{ label: 'ID-升序', key: '-id' }, { label: 'ID-降序', key: '+id' }],
       statusOptions: ['published', 'draft', 'deleted'],
@@ -163,6 +183,7 @@ export default {
   },
   created() {
     this.getList()
+    this.getMerchant()
   },
   methods: {
     getList() {
@@ -174,12 +195,45 @@ export default {
           console.log(response.data)
           this.list = response.data
           this.total = response.total
+          this.is_excel = true
         }
 
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
+      })
+    },
+    handleDownload() {
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['商户名', '用户名', '价格', '状态', '星级', '下单时间']
+        const filterVal = ['Name', 'Nick_name', 'Price', 'Status', 'Stars', 'Time']
+        const data = this.formatJson(filterVal)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: '订单表'
+        })
+        this.downloadLoading = false
+      })
+    },
+    formatJson(filterVal) {
+      return this.list.map(v => filterVal.map(j => {
+        if (j === 'Time') {
+          return parseTime(v[j])
+        } else {
+          return v[j]
+        }
+      }))
+    },
+    getMerchant(){
+      getMerchant().then(response => {
+        if(response.code == 9000){
+          this.$router.push({ name: 'Page401'})
+        }else{
+          this.importanceOptions = response.data
+        }
       })
     },
     cannot(){

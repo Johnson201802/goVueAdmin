@@ -20,17 +20,17 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="ID" prop="Merchant_id" align="center" min-width="60px">
+      <el-table-column label="ID" prop="Merchant_id" align="center" min-width="40px">
         <template slot-scope="{row}">
           <span>{{ row.Merchant_id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="商户名称" min-width="120px">
+      <el-table-column label="商户名称" min-width="100px">
         <template slot-scope="{row}">
           <span  @click="handleUpdate(row)" style="display:block;text-overflow:ellipsis;white-space:wrap;overflow:hidden;">{{ row.Name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="商户门头" min-width="100px" align="center">
+      <el-table-column label="商户门头" min-width="50px" align="center">
         <template slot-scope="{row}">
           <a v-if="row.Img1!=''?true:false" :href="row.Img1" target="_blank"><img :src="row.Img1" class="Merchant_photo"></a>
           <span v-if="row.Img1==''?true:false">没有图片</span>
@@ -38,7 +38,7 @@
       </el-table-column>
       <el-table-column label="商户内部" min-width="100px" align="center">
         <template slot-scope="{row}">
-          <a v-if="row.Img2!=''?true:false" :href="row.Img2" target="_blank"><img :src="row.Img2" class="Merchant_photo22"></a>
+          <a v-if="row.Img2!=''?true:false" :href="row.Img2" target="_blank"><img :src="row.Img2" class="Merchant_photo33"></a>
           <span v-if="row.Img2==''?true:false">没有图片</span>
         </template>
       </el-table-column>
@@ -57,25 +57,21 @@
           <a v-if="row.Qrcode!=''?true:false" :href="row.Qrcode" target="_blank"><img :src="row.Qrcode" class="Merchant_photo22"></a>
         </template>
       </el-table-column>
-      <el-table-column label="排序" min-width="80px" align="center">
-        <template slot-scope="{row}">
-          <el-input  align="center" v-model="row.Order" @blur="sortMerchant(row.Merchant_id,row.Order)"/>
-        </template>
-      </el-table-column>
       <el-table-column label="创建时间" min-width="60px" align="center">
         <template slot-scope="{row}">
           <span @click="handleUpdate(row)">{{ row.Create_time  | parseTime('{y}-{m}-{d}')}}</span>
         </template>
       </el-table-column>
-
-      <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
+      <el-table-column label="是否上架" min-width="50px" align="center">
+        <template slot-scope="{row}">
+          <el-switch v-model="row.Status" active-value='1' active-color="#13ce66" inactive-color="#ff4949" inactive-value="0" @change="changeSwitch(row)"></el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" width="200px" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row.Merchant_id)">
-            编辑
-          </el-button>
-          <el-button  size="mini" type="danger" @click="handleDelete(row,$index,row.Merchant_id)">
-            删除
-          </el-button>
+          <a @click="goService(row.Merchant_id)" style="margin: 10px 10px;text-decoration: underline;">服务</a>
+          <a @click="handleUpdate(row.Merchant_id)" style="margin: 10px 10px;text-decoration: underline;">编辑</a>
+          <a @click="handleDelete(row,$index,row.Merchant_id)" style="margin: 10px 10px;color: #FF0000;text-decoration: underline;">删除</a>
         </template>
       </el-table-column>
     </el-table>
@@ -243,6 +239,40 @@ export default {
     this.getList()
   },
   methods: {
+    changeSwitch(row){
+      let row2 = Object.assign({}, row)
+      changeMerchantStatus(row2.Merchant_id,row2.Status).then((response=>{
+         if(response.code == 200 ){
+           if(row2.Status == '1'){
+             Message({
+               title: '提示',
+               message: '开启成功',
+               type: 'success',
+               duration: 2000
+             })
+           }else{
+             Message({
+               title: '提示',
+               message: '关闭成功',
+               type: 'success',
+               duration: 2000
+             })
+           }
+         }else{
+           Message({
+             title: '提示',
+             message: '网络错误！请重试...',
+             type: 'error',
+             duration: 2000
+           })
+         }
+      }))
+    },
+    goService(id){
+      console.log(id)
+      this.$router.push({ name:'service_model',params:{id:id}})
+      // this.$router.push({ path:'/services_model2/service_list',params:{id:id}})
+    },
     getList() {
       this.listLoading = true
       fetchMerchantList(this.listQuery.page,this.listQuery.limit,this.listQuery.title).then(response => {
@@ -279,34 +309,6 @@ export default {
         })
       }
     },
-    changeMerchantStatus (id,status) {
-       changeMerchantStatus(id,status).then((response=>{
-          if(response.code == 200 ){
-            if(status == 1){
-              Message({
-                title: '提示',
-                message: '开启成功',
-                type: 'success',
-                duration: 2000
-              })
-            }else{
-              Message({
-                title: '提示',
-                message: '关闭成功',
-                type: 'success',
-                duration: 2000
-              })
-            }
-          }else{
-            Message({
-              title: '提示',
-              message: '网络错误！请重试...',
-              type: 'error',
-              duration: 2000
-            })
-          }
-       }))
-  },
   changeMerchantFee (id,flag) {
        changeMerchantFee(id,flag).then((response=>{
           if(response.code == 200 ){
@@ -426,6 +428,7 @@ export default {
         create_time:undefined
       }
     },
+
     handleUpdate(id) {
       this.$router.push({ name:'merchant_edit',params:{id:id}})
     },
@@ -536,9 +539,14 @@ export default {
     max-width: 60px;
     border-radius: 5px;
   }
+  .Merchant_photo33{
+    cursor: pointer;
+    max-height: 80px;
+    border-radius: 5px;
+  }
   .Merchant_photo22{
     cursor: pointer;
-    max-width: 120px;
+    max-width: 80px;
     border-radius: 5px;
   }
 </style>
