@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-editor-container">
   <panel-group />
-  <div ref="tencentMap" style="height:550px;border-radius: 10px;border: 5px solid #ffffff;"></div>
+  <div ref="tencentMap" style="height:600px;border-radius: 10px;border: 2px solid #222222;"></div>
 
 <!--    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <line-chart />
