@@ -50,8 +50,9 @@
       <el-table-column label="状态" min-width="80px" align="center">
         <template slot-scope="{row}">
           <el-tag v-if="row.Status == 1" type="success">已付款</el-tag>
+          <el-tag v-if="row.Status == 0 && row.Price != 0 && row.Discount != '99999999'" type="info">未支付</el-tag>
+          <el-tag v-if="row.Status == 0 && row.Discount == '99999999'" type="warning">活动抵扣</el-tag>
           <el-tag v-if="row.Price == 0" type="warning">VIP支付</el-tag>
-          <el-tag v-if="row.Status == 0 && row.Price != 0" type="info">未支付</el-tag>
           <el-tag v-if="row.Status == 2" type="danger">已退款</el-tag>
         </template>
       </el-table-column>
